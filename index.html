@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+    <META HTTP-EQUIV="expires" CONTENT="0">
+    <title>H517 Project</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/font-awesome.css" rel="stylesheet"> 
+    <script src="js/d3.v3.min.js"></script>
+    <script src="js/d3.geo.projection.js"></script>
+    <script src="js/echarts.js"></script>
+  </head>
+
+  <body>
+
+<div class="banner-top">
+  <div class="w3_navigation">
+    <div class="container">
+      <nav class="navbar navbar-default">
+        <div class="navbar-header navbar-left">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <h1><a class="navbar-brand" href="index.html"><i aria-hidden="true"></i> HUANG FU <p class="logo_w3l_agile_caption">H517 Project</p></a></h1>
+        </div>
+        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+          <nav class="menu menu--iris">
+            <ul class="nav navbar-nav menu__list">
+              <li class="menu__item menu__item--current"><a href="index.html" class="menu__link">CHARTS</a></li>
+              <li class="menu__item"><a href="doc.html" class="menu__link scroll">DOCUMENT</a></li>
+              <li class="menu__item"><a href="youtube.html" class="menu__link scroll">YOUTUBE VIDEO</a></li>            
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </nav>
+    </div>
+  </div>  
+
+   <script>
+
+            var url="https://raw.githubusercontent.com/iufh/h517/master/final.json"
+            d3.json(url + '?' + Math.floor(Math.random() * 1000), function(error,json) {
+            if (error) throw error;
+            d3.json("https://raw.githubusercontent.com/iufh/h517/master/death.json",function(error, deaths) {
+            if (error) throw error;  
+//创建SVG            
+            var width = 650, height = 640;
+            var margin = {"top": 30, "right": 20, "bottom": 20, "left": 20};
+                widthChart = 400- margin.left - margin.right,
+                heightChart =  700 - margin.top - margin.bottom;
+
+            var svg = d3.select("body").append("svg").attr("width", width).attr("height", height).attr("class", "map").attr("transform", "translate(404 ,4)") ;
+            var svg2 = d3.select(".map").append("svg").attr("width", width).attr("height", height).attr("class", "map2").attr("transform", "translate(0 ,0)");
+            var svg3 = d3.select("body").append("svg").attr("width",widthChart).attr("height", height+10).attr("class","chartAoD").attr("transform", "translate(420,9)") ;
+
+//投影
+            var center = d3.geo.centroid(json)
+            var scale  = 80;
+            var offset = [width/2, height/2];
+            var projection = d3.geo.mercator().scale(scale).center(center).translate(offset);
+            var path = d3.geo.path().projection(projection);
+            var bounds  = path.bounds(json);
+            var hscale  = scale*width  / (bounds[1][0] - bounds[0][0])  ;
+            var vscale  = scale*(height - 70) / (bounds[1][1] - bounds[0][1]) ;
+            var scale   = (hscale < vscale) ? hscale : vscale;
+            var offset  = [width - (bounds[0][0] + bounds[1][0])/2, height - (bounds[0][1] + bounds[1][1] + 160)/2];
+                projection = d3.geo.mercator().center(center).scale(scale).translate(offset);
+                path = path.projection(projection);   
+//主要SVG
+            var points = json.features.filter(function(d){return d.geometry.type == "Point";});
+            var lines = json.features.filter(function(d){return d.geometry.type == "LineString";});
+            var workhouse = json.features.filter(function(d){return d.properties.name == "WorkHouse";});
+            var brewery = json.features.filter(function(d){return d.properties.name == "Brewery";});
+            var lineSvg = svg2.append("g").attr("class", "SVG");
+            var lineSvg2 = svg2.append("g").attr("class", "SVG");
+            var pointSvg = svg2.append("g").attr("class", "SVG");
+            var workhouseSvg = svg2.append("g").attr("class", "SVG");
+            var brewerySvg = svg2.append("g").attr("class", "SVG");
+            var deathSvg = svg2.append("g").attr("class", "SVG");
+            var deathdayChart = svg3.append("g").attr("class", "chart1");
+
+//pump图案
+            var svg_name = "https://raw.githubusercontent.com/iufh/h517/master/pump.svg";
+            d3.xml(svg_name,"image/svg+xml", function(xml) {
+       
+            var imported_node = document.importNode(xml.documentElement, true);
+       
+            pointSvg.selectAll(".point")
+                .data(points)
+                .enter()
+                .append("g")
+                .attr("class", "pumpSvg")
+                .attr("class","svg_image")
+                .each(function(d,i){
+            var imported_svg = this.appendChild(imported_node.cloneNode(true));
+        })
+        .attr("transform", function(d,i){return "translate(" + projection(d.geometry.coordinates) + ") scale(0.03)";})
+        .attr("opacity", "1.0");
+      });   
+
+//街道
+            var marshallST = svg2.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",5)
+            .attr("font-weight",700)
+            .style("fill", "#001433")
+            .text("MARSHALL ST")
+            .attr("transform",function(d){
+            return "translate(275.5,260) rotate(66.5)";})
+
+             var deanST = svg2.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",5)
+            .attr("font-weight",700)
+            .style("fill", "#001433")
+            .text("DEAN ST")
+            .attr("transform",function(d){
+            return "translate(517,220) rotate(66.5)";})
+
+            var wardourST = svg2.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",5)
+            .attr("font-weight",700)
+            .style("fill", "#001433")
+            .text("WARDOUR ST")
+            .attr("transform",function(d){
+            return "translate(416,170) rotate(64)";})
+
+            var kingST = svg2.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",5)
+            .attr("font-weight",700)
+            .style("fill", "#001433")
+            .text("KING ST")
+            .attr("transform",function(d){
+            return "translate(200.5,310) rotate(52)";})
+
+            var boardST = svg2.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",5)
+            .attr("font-weight",700)
+            .style("fill", "#001433")
+            .text("BOARD ST")
+            .attr("transform",function(d){
+            return "translate(334.5,293) rotate(-26)";})
+
+//中空地图
+              lineSvg.selectAll("path")
+                    .data(lines)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .style("stroke-width", "7")
+                    .style("stroke", "04172b");
+
+              lineSvg2.selectAll("path")
+                    .data(lines)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .style("stroke-width", "5")
+                    .style("stroke", "white");
+              
+//两个区域
+              workhouseSvg.selectAll("path")
+                    .data(workhouse)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .style("stroke-width", "1")
+                    .style("stroke", "04172b")
+                    .style("fill", "a5d5e1");
+
+              workhouseSvg.selectAll("text")
+                    .data(workhouse)
+                    .enter()
+                    .append("text")     
+                    .attr("transform",function(d){
+                      return "translate("+path.centroid(d)[0]+","+path.centroid(d)[1]+") rotate(-24)";})
+                    .attr("text-anchor","middle")
+                    .attr("dy", ".35em")
+                    .attr('font-size','6pt')
+                    .attr("fill","04172c")
+                    .style("stroke-width", "0.2")
+                    .style("stroke", "04172c")
+                    .attr("font-weight",700)
+                    .text("Workhouse");
+
+               brewerySvg.selectAll("path")
+                    .data(brewery)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .style("stroke-width", "1")
+                    .style("stroke", "04172b")
+                    .style("fill", "c2baef");
+
+              brewerySvg.selectAll("text")
+                    .data(brewery)
+                    .enter()
+                    .append("text")     
+                    .attr("transform",function(d){
+                      return "translate("+path.centroid(d)[0]+","+path.centroid(d)[1]+") rotate(62)";})
+                    .attr("text-anchor","middle")
+                    .attr("dy", ".35em")
+                    .attr('font-size','6pt')
+                    .attr("fill","04172c")
+                    .attr("font-weight",700)
+                    .style("stroke-width", "0.2")
+                    .style("stroke", "04172c")
+                    .text("Brewery");
+//title right
+             var maptitle = svg.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",12)
+            .style("fill", "#001433")
+            .text("John Snow's Cholera Map")
+            .attr("transform",function(d){
+            return "translate(250,638) rotate(0)";})
+
+             var maptitle = svg3.append("g")
+            .attr("class","SVG")
+            .append("text")
+            .attr("font-size",12)
+            .style("fill", "#001433")
+            .text("Death Numbers of Each Day")
+            .attr("transform",function(d){
+            return "translate(164,644) rotate(0)";})
+
+//缩放
+            var xZoom,yZoom,sZoom;
+            var zoom = d3.behavior.zoom().translate([0, 0]).scaleExtent([1, 10]).scale(1).on("zoom", zoomed);
+
+            function zoomed() {
+              xZoom=d3.event.translate[0];
+              yZoom=d3.event.translate[1];
+              sZoom=d3.event.scale;
+              svg2.selectAll(".SVG").attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+              }
+              
+            svg.call(zoom);
+            svg.selectAll("foreignObject")
+                .data("1")
+                .enter()
+                .append("foreignObject")
+                .attr("class", "reset")
+                .attr("float","left")
+                .attr("x", width-390)
+                .attr("y", 598)
+                .append("xhtml:body")
+                .html(function(d){ return "<form><input type=button class=button1 value= "+"Reset"+" /></form>"})
+                 .on("click",function(){
+                  d3.transition().duration(250).tween("zoom", function() {
+                    var si = d3.interpolate(sZoom, 1);
+                    var xi = d3.interpolate(xZoom, 0);
+                    var yi = d3.interpolate(yZoom, 0);
+                      return function(t){
+                        svg2.call(zoom.translate([xi(t),yi(t)]).scale(si(t)).event);
+                      }
+                 });
+            });
+
+//表1
+            var deathdays = [
+                {"date": "19-Aug","number": 1},
+                {"date": "20-Aug","number": 1},
+                {"date": "21-Aug","number": 1},
+                {"date": "22-Aug","number": 0},
+                {"date": "23-Aug","number": 1},
+                {"date": "24-Aug","number": 1},
+                {"date": "25-Aug","number": 0},
+                {"date": "26-Aug","number": 1},
+                {"date": "27-Aug","number": 1},
+                {"date": "28-Aug","number": 1},
+                {"date": "29-Aug","number": 1},
+                {"date": "30-Aug","number": 8},
+                {"date": "31-Aug","number": 56},
+                {"date": "1-Sep","number": 143},
+                {"date": "2-Sep","number": 116},
+                {"date": "3-Sep","number": 54},
+                {"date": "4-Sep","number": 46},
+                {"date": "5-Sep","number": 36},
+                {"date": "6-Sep","number": 20},
+                {"date": "7-Sep","number": 28},
+                {"date": "8-Sep","number": 12},
+                {"date": "9-Sep","number": 11},
+                {"date": "10-Sep","number": 5},
+                {"date": "11-Sep","number": 5},
+                {"date": "12-Sep","number": 1},
+                {"date": "13-Sep","number": 3},
+                {"date": "14-Sep","number": 0},
+                {"date": "15-Sep","number": 1},
+                {"date": "16-Sep","number": 4},
+                {"date": "17-Sep","number": 2},
+                {"date": "18-Sep","number": 3},
+                {"date": "19-Sep","number": 0},
+                {"date": "20-Sep","number": 0},
+                {"date": "21-Sep","number": 2},
+                {"date": "22-Sep","number": 1},
+                {"date": "23-Sep","number": 1},
+                {"date": "24-Sep","number": 1},
+                {"date": "25-Sep","number": 1},
+                {"date": "26-Sep","number": 1},
+                {"date": "27-Sep","number": 1},
+                {"date": "28-Sep","number": 0},
+                {"date": "29-Sep","number": 0}
+            ];    
+
+            var x = d3.scale.ordinal().rangeRoundBands([0,heightChart-30], .1);            
+            var y = d3.scale.linear().range([0, widthChart- margin.left - margin.right - 40]);
+
+            var xAxis = d3.svg.axis().scale(x).orient("left");
+            var yAxis = d3.svg.axis().scale(y).orient("top").ticks(10);
+
+            x.domain(deathdays.map(function(d) { return d.date; }));
+            y.domain([0, (d3.max(deathdays, function(d) { return d.number; }))]);
+
+            updateDeaths();
+
+            deathdayChart.append("g")
+                  .attr("class", "xaxis")
+                  .attr("transform", "translate(50,16)")
+                  .call(xAxis)
+                  .selectAll("text")
+                  .style("text-anchor", "end")
+                  .attr("dx", "-0.2em")
+                  .attr("dy", "0.3em")
+                  .attr("transform", "rotate(0)" );
+
+            deathdayChart.append("g")
+                  .attr("class", "yaxis")
+                  .attr("transform", "translate(50,30)")
+                  .call(yAxis)
+
+            deathdayChart.selectAll("bar")
+                  .data(deathdays)
+                  .enter().append("rect").attr("class", "chartBar")
+                  .style("fill", "#2f4554")
+                  .attr("x", 51)
+                  .style("cursor","pointer")
+               /*   .on("mousehover", function(d) {
+                  d3.select("rect")
+                  .attr("fill", "red");
+                  })
+                */
+                  .attr("width",function(d) { return (y(d.number)+2); } )
+                  .attr("y", function(d) { return x(d.date)+16; })
+                  .attr("height", x.rangeBand())
+                  .attr("dy", ".25em")
+//点击事件
+                  .on("click",function(d){
+                    var day = d.date;
+                    deathdayChart.selectAll(".chartBar")
+                        .style("fill","#2f4554")
+                        .filter(function(d){return d.date==day;}) 
+                        .style("fill", "#fa4a21");
+
+                    newData = deaths.features.filter(function(d){return d.properties.deathday==day;}); 
+                    newDataFemale = newData.filter(function(d){return d.properties.sex == "female"});
+                    newDataMale = newData.filter(function(d){return d.properties.sex == "male"});
+                       
+                    newRowsFemale = deathSvg.selectAll("circle").data(newDataFemale,function(d){return d.id;});
+                    newRowsFemale.enter()
+                              .append("circle")
+                              .attr("r", 2.3)
+                              .attr("opacity", "0.8")
+                              .attr("transform", function(d) {
+                                  //whatever transformation that needs to be done
+                                  return "translate(" + projection(d.geometry.coordinates) + ")";
+                              })
+                              .style("fill", "f86161")
+                              .style("stroke-width", "1")
+                              .style("stroke", "04172b")
+                              .classed("pin", true);  
+                     
+                    newRowsFemale.exit().remove();  
+          
+                    newRowsMale = deathSvg.selectAll("rect").data(newDataMale,function(d){return d.id;});
+                    newRowsMale.enter()
+                              .append("rect")
+                              .attr("width", 4)
+                              .attr("height",4)
+                              .attr("opacity", "0.8")
+                              .attr("transform", function(d) {
+                                  //whatever transformation that needs to be done
+                                  return "translate(" + projection(d.geometry.coordinates) + ")";
+                              })
+                              .style("fill", "steelblue")
+                              .style("stroke-width", "1")
+                              .style("stroke", "04172b");
+          
+                    newRowsMale.exit().remove(); 
+                  });
+            
+              deathdayChart.append("g")
+              .attr("class", "barNumber")
+              .selectAll("text")
+               .data(deathdays)
+               .enter()
+               .append("text")
+               .text(function(d) {
+                    return d.number;
+               })
+               .attr("text-anchor", "middle")
+               .attr("x", function(d) { return y(d.number) + 64; })
+               .attr("height", x.rangeBand())
+               .attr("y", function(d) { return x(d.date)+27; })
+               .attr("font-family", "sans-serif")
+               .attr("font-size", 12)
+               .attr("fill", "04172b")
+               .on("click",function(d){
+
+                    newData = deaths.features.filter(function(d){return d.properties.deathday==day;});    
+                    newDataFemale = newData.filter(function(d){return d.properties.sex == "female"});
+                    newDataMale = newData.filter(function(d){return d.properties.sex == "male"});
+
+                  });
+
+               deathdayChart.selectAll("foreignObject")
+                        .data("select all deaths")
+                        .enter()
+                        .append("foreignObject")
+                        .attr("class", "selectAllDays")
+                        .attr("x", widthChart - 182)
+                        .attr("y",604)
+                        .append("xhtml:body")
+                        .html(function(d){ return "<form><input type=button class=button2 value= "+"Reset"+" /></form>"})
+                        .on("click",updateDeaths);
+
+//图例            
+            var legendMap = svg.append("g").attr("class", "legendMap")
+            var legendPump = legendMap.selectAll('.map').data("1").enter();
+
+            var svg_name = "https://raw.githubusercontent.com/iufh/h517/master/pump.svg";
+            d3.xml(svg_name,"image/svg+xml", function(xml) { 
+              // Take xml as nodes.
+            var imported_node = document.importNode(xml.documentElement, true);
+                              
+                legendPump.append("text")
+                  .attr('font-size',12)
+                  .attr("x", width-494)
+                  .attr("y", 20)
+                  .text("Pump");
+
+                legendPump.append("g")
+                  .attr("class", "pumpLegend")
+                  .attr("class","svg_image")
+                  .attr("opacity", "1.0")
+                  .each(function(d,i){
+                    // Clone and append xml node to each data binded element.
+                    var imported_svg = this.appendChild(imported_node.cloneNode(true));
+                  })
+                  .attr("transform", function(d,i){return "translate(" + (width-510) + ",8) scale(0.022)";});
+            });
+           
+            var legendMale = legendMap.selectAll('.map').data("1").enter();
+            legendMale.append("g")
+                  .append("rect")
+                  .attr("x", width-630)
+                  .attr("y", 10)
+                  .attr("width", 10)
+                  .attr("height", 10)
+                  .style("fill", "steelblue");
+            legendMale.append("text")
+                  .attr('font-size',12)
+                  .attr("x", width-616)
+                  .attr("y", 20)
+                  .text("Male");
+
+            var ledgendFemale = legendMap.selectAll('.map').data("2").enter();
+            ledgendFemale.append("g")
+                  .append("circle")
+                  .attr("r",5.5)
+                  .attr("transform", "translate("+(width-570)+",15)")
+                  .attr("fill", "#f86161");
+            ledgendFemale.append("text")
+                  .attr('font-size',12)
+                  .attr("x", width-560)
+                  .attr("y", 20)
+                  .text("Female");
+//更新
+            function updateDeaths(){                          
+                    var choices = [];
+                    d3.selectAll(".chartBar").each(function(d){
+                        cb = this; 
+                        if(cb.checked){
+                            choices.push(cb.id);
+                        }
+                    });
+      
+                    if(choices.length > 0){
+                        newData = deaths.features.filter(function(d){return choices.includes(d.properties.deathday);}) 
+                        newDataBar = deathdays.filter(function(d){return choices.includes(d.date);})                                  
+                    } else {
+                        newData = deaths.features;
+                        newDataBar = deathdays;     
+                    } 
+
+                    newDataFemale = newData.filter(function(d){return d.properties.sex == "female"});
+                    newDataMale = newData.filter(function(d){return d.properties.sex == "male"});
+                                    
+                    newRowsFemale = deathSvg.selectAll("circle")
+                                      .data(newDataFemale,function(d){return d.id;});
+                    newRowsFemale.enter()
+                              .append("circle")
+                              .attr("r", 2.2)
+                              .attr("opacity", "0.8")
+                              .attr("transform", function(d) {
+                                  //whatever transformation that needs to be done
+                                  return "translate(" + projection(d.geometry.coordinates) + ")";
+                              })
+                              .style("fill", "f86161")
+                              .style("stroke-width", "1")
+                              .style("stroke", "04172b")
+                              .classed("pin", true);  
+                      
+              newRowsFemale.exit().remove();
+                         
+                      newRowsMale = deathSvg.selectAll("rect")
+                                      .data(newDataMale,function(d){return d.id;});
+                      newRowsMale.enter()
+                              .append("rect")
+                              .attr("width", 4)
+                              .attr("height",4)
+                              .attr("opacity", "0.8")
+                              .attr("transform", function(d) {
+                                  //whatever transformation that needs to be done
+                                  return "translate(" + projection(d.geometry.coordinates) + ")";
+                              })
+                              .style("fill", "steelblue")
+                              .style("stroke-width", "1")
+                              .style("stroke", "04172b");                      
+                      newRowsMale.exit().remove();               
+                deathdayChart.selectAll(".chartBar").style("fill", '#2f4554');    
+            }   
+    }); 
+    });         
+
+    </script>
+    <body>
+
+    <div id="chart2Map" class="chart2Map" style="width: 0px;height:0px; position: absolute; top:60px; right:20px"></div>
+    <script type="text/javascript">
+       /* 
+        var myChart = echarts.init(document.getElementById('chart2Map'));
+
+    myChart.setOption({
+    
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01],
+        position:'top'
+    },
+    yAxis: {
+        inverse:'true',
+        type: 'category',
+        data: ['19-Aug','20-Aug','21-Aug','22-Aug','23-Aug','24-Aug','25-Aug',
+        '26-Aug','27-Aug','28-Aug','29-Aug','30-Aug','31-Aug','1-Sep','2-Sep'
+        ,'3-Sep','4-Sep','5-Sep','6-Sep','7-Sep','8-Sep','9-Sep','10-Sep'
+        ,'11-Sep','12-Sep','13-Sep','14-Sep','15-Sep','16-Sep','17-Sep','18-Sep'
+        ,'19-Sep','20-Sep','21-Sep','22-Sep','23-Sep','24-Sep','25-Sep','26-Sep'
+        ,'27-Sep','28-Sep','29-Sep']
+    },
+    series: [
+        {
+            name: 'DeathNumber',
+            type: 'bar',
+            data: [1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 8, 56, 143, 116, 54, 46,
+            36, 20, 28, 12, 11, 55, 13, 0, 1, 4, 2, 3, 0, 0, 2, 1, 1, 1, 1, 1,
+            1, 0, 0]
+        },
+       
+    ]
+}); */
+    </script>
+
+    <div id="main" style="width: 320px;height:305px; position: absolute; left: 2%; top: 442px"></div>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.setOption({
+        title:{
+        text: 'Death Percentage in Age Groups',
+        textStyle:{
+        fontSize: 12,
+        fontWeight:'normal',
+        fontFamily:'sans-serif',
+        color: '#000'
+      },
+        x:'center',
+        y:'bottom'
+      },
+        tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series : [
+        {
+            type: 'pie',
+            radius : '65%',
+            center: ['50%', '50%'],
+            selectedMode: 'single',
+            data:[
+                {value:143,name: '0-10',},
+                {value:48, name: '11-20'},
+                {value:58, name: '21-40'},
+                {value:58, name: '41-60'},
+                {value:91, name: '61-80'},
+                {value:174, name: '>80'}
+            ],
+        }
+    ]
+});
+</script>
+
+<div id="main2" style="width: 368px;height:400px; position: absolute; top:77px; left: 0.5%"></div>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main2'));
+        myChart.setOption({
+        title:{
+        text: 'Death Numbers in Different Age and Gender',
+        textStyle:{
+        fontSize: 12,
+        fontWeight:'normal',
+        fontFamily:'sans-serif',
+        color: '#000'
+      },
+        x:'center',
+        y:'366'
+        },
+        tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+        },
+        legend: {
+        itemWidth:12,
+        itemHeight:12,
+             textStyle:{
+        fontSize: 12,
+        fontWeight:'normal',
+        fontFamily:'sans-serif',
+        color: '#000'
+      },
+        orient: 'horizontal', // 'vertical'
+        x: 'center', 
+        y: '8%',
+
+        data: ['Male', 'Female']
+        },
+        grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '10%',
+        containLabel: true
+        },
+        xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01],
+        position:'top'
+        },
+        yAxis: {
+        type: 'category',
+        data: ['0-10','11-20','21-40','41-60','61-80','>80'],
+        inverse:'true'
+        },
+        series: [
+        {
+            name: 'Male',
+            type: 'bar',
+            cursor:'defalut',
+            itemStyle:{
+                normal:{
+                    color:'#347c94'
+                }
+            },
+            data: [65, 29, 34, 23, 46, 88]
+        },
+        {
+            name: 'Female',
+            type: 'bar',
+            cursor:'defalut',
+                        itemStyle:{
+                normal:{
+                    color:'#d36e6e'
+                }
+            },
+            data: [78, 19, 24, 35, 45, 86]
+        }
+    ]
+});
+    </script>
+  </body>
+
