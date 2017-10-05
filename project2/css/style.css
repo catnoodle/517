@@ -35,13 +35,6 @@ body{
     bottom:1.8%;
 }
 
-path{
-    fill: none;
-    stroke: #000;
-    stroke-width: 0.8px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    }
 
 .YOUTUBE{
     position: relative;
