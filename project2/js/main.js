@@ -141,6 +141,6 @@ $(function () {
                                  '</div>');
         }
     });
-    $.get('data/exctyall.csv', function(csv) {console.log(csv);});
+    $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.csv', function(csv) {console.log(csv);});
 });
 
