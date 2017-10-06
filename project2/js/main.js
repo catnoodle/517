@@ -1,5 +1,11 @@
 
 $(function () {
+
+    var exportStateCT = {
+        category:[],
+        series:[]
+    };
+
     // Load the data from a Google Spreadsheet
     // https://docs.google.com/a/highsoft.com/spreadsheet/pub?hl=en_GB&hl=en_GB&key=0AoIaUO7wH1HwdDFXSlpjN2J4aGg5MkVHWVhsYmtyVWc&output=html
     Highcharts.data({
@@ -57,12 +63,14 @@ $(function () {
                         type: 'map',
                         borderWidth: 1
                     },
+                    credits:{
+                        enabled:false // 禁用版权信息
+                   },
                     title: {
                         text: 'US presidential election 2012 results'
                     },
                     subtitle: {
-                        text: 'Source: <a href="http://en.wikipedia.org/wiki/United_States_presidential_election,' +
-                        '_2012">Wikipedia</a>'
+                        text: 'Source: <a href="https://www.census.gov/foreign-trade/statistics/state/data/index.html"> US Census</a>'
                     },
                     legend: {
                         align: 'right',
@@ -76,8 +84,9 @@ $(function () {
                     },
                     mapNavigation: {
                         enabled: true,
-                        enableButtons: false
+                        enableButtons: true
                     },
+                    /*
                     colorAxis: {
                         dataClasses: [{
                             from: -100,
@@ -91,6 +100,7 @@ $(function () {
                             name: 'Obama'
                         }]
                     },
+                    */
                     series: [{
                         data: [],
                         mapData: Highcharts.maps['countries/us/us-all'],
@@ -141,6 +151,49 @@ $(function () {
                                  '</div>');
         }
     });
-    $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.csv', function(csv) {console.log(csv);});
+
+
+    // 请求 data.csv 数据
+$.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.csv', function(data) {
+ 
+
+// 分隔每一行
+     var lines = data.split('\n');
+
+    // 遍历每一行
+    $.each(lines, function(lineNo, line) {
+        var items = line.split(',');  
+        // 处理第一行，即分类
+        if (lineNo == 0) {
+            $.each(items, function(itemNo, item) {
+                if (itemNo >= 0) {
+                   exportStateCT.category.push(item);   
+                }
+            });
+        }
+        // 处理其他的每一行
+        else {
+            var series = {
+                name:[],
+                data: []
+            };
+            $.each(items, function(itemNo, item) {
+                if (itemNo == 0) {
+                    series.name = item;   // 数据列的名字
+                } else {
+                    series.data.push(item); // 数据，记得转换成数值类型
+                }
+            });
+            // 最后将数据 push 到数据列配置里
+           exportStateCT.series.push(series);
+        }  /* */
+    });console.log(exportStateCT.series[0].name); 
+/* 
+    // 创建图表
+    //var chart = new Highcharts.Chart(options);
+*/
+    
+});
+
 });
 
