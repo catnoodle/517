@@ -174,20 +174,36 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/expo
         // 处理其他的每一行
         else {
             var series = {
-                name:[],
+                state:{
+                    name:[],
+                    coor:[]
+                },
                 data: []
             };
+            var tempCoor,tempCoor2;
             $.each(items, function(itemNo, item) {
+
                 if (itemNo == 0) {
-                    series.name = item;   // 数据列的名字
-                } else {
-                    series.data.push(item); // 数据，记得转换成数值类型
+                    series.state.name = item;   // 数据列的名字
+                } 
+                else {
+                    
+                    if(itemNo == 1){
+                        tempCoor = item;
+                    }
+                    else if(itemNo == 2){
+                        tempCoor2 = item;
+                        series.state.coor.push(tempCoor,tempCoor2);
+                    }
+                    else if(itemNo > 2){
+                        series.data.push(item);
+                    }// 数据，记得转换成数值类型
                 }
             });
             // 最后将数据 push 到数据列配置里
            exportStateCT.series.push(series);
         }  /* */
-    });console.log(exportStateCT.series[0]); 
+    }); console.log(exportStateCT.series[0]);
 /* 
     // 创建图表
     //var chart = new Highcharts.Chart(options);
