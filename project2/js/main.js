@@ -187,7 +187,7 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/expo
             // 最后将数据 push 到数据列配置里
            exportStateCT.series.push(series);
         }  /* */
-    });console.log(exportStateCT.series[0].name); 
+    });console.log(exportStateCT.series[0]); 
 /* 
     // 创建图表
     //var chart = new Highcharts.Chart(options);
