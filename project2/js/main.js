@@ -24,7 +24,9 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
             if (dataItem.countryd == "World") {
                 res.push({
                     name: dataItem.statename,
-                    coords: dataItem.coor1        
+                    value:dataItem.coor1,
+                    symbolSize: dataItem.val2013/50000 +3,
+                    val2013:dataItem.val2013,       
                 });
                 i++;
             }
@@ -34,7 +36,8 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
                     if(!res.contains(cName)){    
                         res.push({
                             name: dataItem.countryd,
-                            coords: dataItem.coor2
+                            value: dataItem.coor2,
+                            symbolSize: 3,
                         })
                         i++;
                     }  
@@ -64,18 +67,18 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
             data.forEach(function (dataItem) {
             if(dataItem.countryd == "World"){
                 res.push({
-
                     name:dataItem.statename,
                     value:dataItem.coor1,
-                    symbolSize: dataItem.val2013/100000 +5,
-                    coords:dataItem.coor1,
+                    symbolSize: dataItem.val2013/50000 +3,
+                    val2013:dataItem.val2013,
  
                 })
             }
             })
+            
             return res;
         };
-console.log(pointData(exportCTData));
+
   
 
 //航线图数据
@@ -125,9 +128,7 @@ var series = [];
             
             }
         },
-        symbolSize: function (val) {
-            return val / 100000 + 2;
-        },
+
         itemStyle: {
             normal: {
                 color: '#fff',
@@ -135,7 +136,7 @@ var series = [];
                 shadowColor:'#333'
             }
         },
-        data: pointData(exportCTData)
+        data: allCTCoor(exportCTData)
         
     }
 );
