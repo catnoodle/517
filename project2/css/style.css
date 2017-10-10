@@ -115,8 +115,9 @@ a:focus{
 /*--header -top--*/
 /*-- nav --*/
 .w3_navigation {
-  background: #071e37;
-    padding: 0.9em 0;
+  background: #293c55;
+    padding: 0.3em 0;
+    border-bottom: 1px solid #0e151f;
 }
 .navbar-default {
     background: none;
@@ -145,7 +146,7 @@ a:focus{
     text-transform: uppercase;
 }
 .navbar-default .navbar-nav > li > a:hover{
-    color:#ef5734;
+    color:#ff5a77;
 }
 .navbar-default .navbar-nav > li > a:focus {
     color: #fff;
@@ -171,7 +172,7 @@ nav.navbar.navbar-default {
 }
 .navbar-brand {
     padding: 3px;
-    font-size:1em;
+    font-size:32px;
     text-transform: uppercase;
     letter-spacing:1px;
     line-height:14px;
@@ -185,7 +186,7 @@ p.logo_w3l_agile_caption {
     margin:  12px;
     text-transform:uppercase;
     letter-spacing:6px;
-    font-size: 12px;
+    font-size: 8px;
     color: #8c908c;
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
@@ -208,7 +209,7 @@ p.logo_w3l_agile_caption {
 .agile_short_dropdown > li > a:hover{
     color: #fff;
     text-decoration: none;
-   background-color: #ef5734;
+   background-color: #ff5a77;
 }
 /*-- nav-effect --*/
 .menu__list {
@@ -254,7 +255,7 @@ p.logo_w3l_agile_caption {
 }
 
 .menu--iris .menu__item--current .menu__link,.menu__link:hover {
-	color:#ef5734;
+	color:#ff5a77;
 }
 
 .menu--iris .menu__link::before,
@@ -264,7 +265,7 @@ p.logo_w3l_agile_caption {
 	width: 10px;
 	height: 10px;
 	opacity: 0;
-	border: 2px solid #ef5734;
+	border: 2px solid #ff5a77;
 	-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
 	transition: transform 0.3s, opacity 0.3s;
 	-webkit-transition-timing-function: cubic-bezier(0.17, 0.67, 0.05, 1.29);
@@ -353,7 +354,7 @@ p.logo_w3l_agile_caption {
 }
 
 .agileits-banner-info span {
-	background:#ef5734;
+	background:#ff5a77;
     padding: 0.5em 2em;
     color: #fff;
     font-size: 1.1em;
@@ -434,7 +435,7 @@ p.logo_w3l_agile_caption {
 .about-top_agile_its span {
      font-weight: 600;
     font-style: italic;
-    color: #ef5734;
+    color: #ff5a77;
     font-size: 1em;
     letter-spacing: 1px;
     line-height: 2em;
@@ -1089,7 +1090,7 @@ text-align:center;
 		letter-spacing: 2px;
 	}
 	.navbar-default .navbar-toggle .icon-bar {
-       background-color:#ef5734;
+       background-color:#ff5a77;
 	}
 	.navbar-toggle .icon-bar {
 		display: block;

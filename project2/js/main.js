@@ -25,7 +25,7 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
                 res.push({
                     name: dataItem.statename,
                     value:dataItem.coor1,
-                    symbolSize: dataItem.val2013/50000 +3,
+                    symbolSize: dataItem.val2013/50000 +2.5,
                     val2013:dataItem.val2013,       
                 });
                 i++;
@@ -38,6 +38,10 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
                             name: dataItem.countryd,
                             value: dataItem.coor2,
                             symbolSize: 3,
+                            itemStyle:{
+                                normal:{
+                                    color: '#0fb3ff',
+                                }}
                         })
                         i++;
                     }  
@@ -85,55 +89,56 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
 var path = 'arrow';
 var series = [];
     series.push(
+
     {
-        name: {function(param){
-            return param.statename+ " to " +param.countryd;
-        }},
+        name: 'Trade Lines',
         type: 'lines',
         zlevel: 2,
+        silent: true,
         effect: {
             show: true,
-            period: 15,
-            color: '#9CE6FE',
+            period: 7,
+            color: '#69c8ff',
             trailLength: 0.01,
+            opacity: 0.05,
             symbol:path,
-            symbolSize: 0
+            symbolSize: 4
         },
+              blendMode:'lighter',
+
         lineStyle: {
             normal: {
-                color: 'red',
-                width: 0.5,
-                opacity: 0.01,
+                color: '#69c8ff',
+                width: 0.05,
+                opacity: 0.1,
                 curveness: 0.1
             }
         },
-        blendMode:'lighter',
         data: convertData(exportCTData)
     },
     {
-        name: {function(param){
-            return param.statename+ " to " +param.countryd;
-        }},
+        name: 'point',
         type: 'effectScatter',
         coordinateSystem: 'geo',
-        zlevel: 3,
-        rippleEffect: {
-            brushType: 'stroke'
-        },
+        rippleEffect: {//涟漪特效
+            brushType: 'stroke', //波纹绘制方式 stroke, fill
+        }, 
+        zlevel: 2,
+      //  silent:true,
+        hoverAnimation: true,
         label: {
-            normal: {
-                show: false,
+            emphasis:{
+                show: true,
                 position: 'right',
                 formatter: '{b}'
-            
             }
         },
-
+showEffectOn:'render',
         itemStyle: {
             normal: {
-                color: '#fff',
-                shadowBlur:10,
-                shadowColor:'#333'
+                color: '#d8e6ff',
+                shadowBlur:2,
+                shadowColor:'#fff'
             }
         },
         data: allCTCoor(exportCTData)
@@ -179,33 +184,31 @@ option = {
     },
 
 */
-    legend: {
-        orient: 'vertical',
-        top: 'bottom',
-        left: 'right',
-        data:['北京 Top10', '上海 Top10', '广州 Top10'],
-        textStyle: {
-            color: '#fff'
-        },
-        selectedMode: 'single'
-    },
     geo: {
         map: 'USA',
+        selectedMode:'multiple',
         label: {
             emphasis: {
                 show: false
+            },
+
+            normal:{
+                color:'white',
+                position:'right'
             }
         },
         roam: true,
+
         itemStyle: {
             normal: {
                 areaColor: '#323c48',
                 borderColor: '#404a59'
             },
+
             emphasis: {
                 areaColor: '#2a333d'
             }
-        },
+        }/*
         regions:[
             {
                 name: 'Alabama',
@@ -216,7 +219,7 @@ option = {
                     }
                 }
             }
-        ]        
+        ]   */     
     },
     series: series
 };;
@@ -224,6 +227,49 @@ if (option && typeof option === "object") {
     myChart.setOption(option, true);
 };
 
+myChart.on('click', function (params) {
+    if (params.componentType === 'series') {
+           
+       }
+     $(function() {
+       $( "#dialog" ).dialog();
+     })
+           var myChart = echarts.init(document.getElementById('dialog'));
+           myChart.setOption({
+           title:{
+           text: 'Death Percentage in Age Groups',
+           textStyle:{
+           fontSize: 12,
+           fontWeight:'normal',
+           fontFamily:'sans-serif',
+           color: '#000'
+         },
+           x:'center',
+           y:'bottom'
+         },
+           tooltip : {
+           trigger: 'item',
+           formatter: "{a} <br/>{b} : {c} ({d}%)"
+           },
+           series : [
+           {
+               type: 'pie',
+               radius : '65%',
+               center: ['50%', '50%'],
+               selectedMode: 'single',
+               data:[
+                   {value:143,name: '0-10',},
+                   {value:48, name: '11-20'},
+                   {value:58, name: '21-40'},
+                   {value:58, name: '41-60'},
+                   {value:91, name: '61-80'},
+                   {value:174, name: '>80'}
+               ],
+           }
+       ]
+   });
+   
+   });
 
 });
 });
