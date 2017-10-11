@@ -12,30 +12,53 @@
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/font-awesome.css" rel="stylesheet">
-    <script src="js/d3.v3.min.js"></script>
-    <script src="js/d3.geo.projection.js"></script> 
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="css/jquery-ui.min.css">
     <script src="js/echarts.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
     
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
     #container {
       height: 700px; 
-      min-width: 310px; 
-      max-width: 1200px; 
+      max-width: 1400px; 
       margin: 0 auto; 
     }
-    .loading {
-      margin-top: 10em;
+
+    #left {
+      height: 700px;
+      width: 380px;
+      float: left;
+      margin-top:10px;
+    }
+
+    #right {
+      height: 700px;
+      width: 380px;
       text-align: center;
       color: gray;
+      float: right;
+      margin-top: 10px;
+      stroke: grey;
+      stroke-width: 0.5px;
+    }
+    
+    #leftTop, #leftButtom, #rightTop, #rightButtom {
+      height: 340px;
+      width:  360px;
+    }
+
+    #map {
+      height: 700px;
+      width: 630px;
+      margin: 0 auto;
+    }
+
+    .loading {
+      position: relative;
+      top:100px;
+      text-align: center;
+      color: gray;
+     
     }
   </style>
     
@@ -73,13 +96,24 @@
     </div>
 
     <div id="container">
-        <div class="loading">
-            <i class="icon-spinner icon-spin icon-large"></i>
+      <div id="left">
+        <div id="leftTop" ></div>
+        <div id="leftButtom" ></div>
+      </div>
+      <div id="right">
+          <div id="rightTop" ></div>       
+          <div id="rightButtom" ></div>
+      </div>
+      <div id="map">
+      <div class="loading">
+          <i class="icon-spinner icon-spin icon-large"></i>
             Loading data from Google Spreadsheets...
-        </div>
+      </div>
     </div>
-    <div id="dialog" style="width: 320px;height:305px;"></div>
-    <script src="js/main.js"></script>
+    </div>
+    
+    <script src="js/State.js"></script>
+    
 
   </body>
 

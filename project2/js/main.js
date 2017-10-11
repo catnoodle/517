@@ -93,7 +93,7 @@ var series = [];
     {
         name: 'Trade Lines',
         type: 'lines',
-        zlevel: 2,
+        z:999,
         silent: true,
         effect: {
             show: true,
@@ -108,6 +108,7 @@ var series = [];
 
         lineStyle: {
             normal: {
+                
                 color: '#69c8ff',
                 width: 0.05,
                 opacity: 0.1,
@@ -120,22 +121,27 @@ var series = [];
         name: 'point',
         type: 'effectScatter',
         coordinateSystem: 'geo',
+        z: 999,
         rippleEffect: {//涟漪特效
             brushType: 'stroke', //波纹绘制方式 stroke, fill
         }, 
-        zlevel: 2,
+        
       //  silent:true,
         hoverAnimation: true,
-        label: {
+        tooltip: {
             emphasis:{
                 show: true,
                 position: 'right',
-                formatter: '{b}'
+                formatter: function(params){
+                    console.log(params.data.val2013);
+                    return params.data.name+':'+params.data.val2013;
+                }
             }
         },
-showEffectOn:'render',
+        showEffectOn:'render',
         itemStyle: {
             normal: {
+                
                 color: '#d8e6ff',
                 shadowBlur:2,
                 shadowColor:'#fff'
@@ -149,7 +155,7 @@ showEffectOn:'render',
 //创建地图
 option = {
     backgroundColor: '#404a59',
-    title : {
+    title : { 
         text: 'US Census Foreign Trade statistics',
         subtext: 'Source: US Cencus',
         sublink: 'http://www.census.gov/popest/data/datasets.html',
@@ -171,28 +177,17 @@ option = {
         },
         selectedMode: 'single'
     },
-/*    visualMap: {
-        left: 'left',
-        textColor:'#fff',
-        min: 0,
-        max: 3000000,
-        inRange: {
-            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
-        },
-        text:['High','Low'],           // 文本，默认为数值文本
-        calculable: true
-    },
-
-*/
     geo: {
         map: 'USA',
         selectedMode:'multiple',
+        z:2,
         label: {
             emphasis: {
                 show: false
             },
 
             normal:{
+                
                 color:'white',
                 position:'right'
             }
@@ -208,18 +203,7 @@ option = {
             emphasis: {
                 areaColor: '#2a333d'
             }
-        }/*
-        regions:[
-            {
-                name: 'Alabama',
-                itemStyle: {
-                    normal: {
-                        areaColor: 'red',
-                        color: 'red'
-                    }
-                }
-            }
-        ]   */     
+        }
     },
     series: series
 };;
