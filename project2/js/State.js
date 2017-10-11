@@ -169,7 +169,7 @@ var exportCTVal = function(dataItem, year){
             });
             res.push({
                 name:element,
-                value:count
+                value:count.toFixed(2)
             });
         });
     } 
@@ -183,7 +183,7 @@ var exportCTVal = function(dataItem, year){
             });
             res.push({
                 name:element,
-                value:count
+                value:count.toFixed(2)
             });
         });
     }   
@@ -197,7 +197,7 @@ var exportCTVal = function(dataItem, year){
             });
             res.push({
                 name:element,
-                value:count
+                value:count.toFixed(2)
             });
         });
     }  
@@ -211,7 +211,7 @@ var exportCTVal = function(dataItem, year){
             });
             res.push({
                 name:element,
-                value:count
+                value:count.toFixed(2)
             });
         });
     }  
@@ -248,19 +248,9 @@ var optionLT = {
             type: 'inside',
             xAxisIndex: 0,
             start: 0,
-            end: 100
-        },
-        {
-            type: 'slider',
-            yAxisIndex: 0,
-            start: 0,
-            end: 100
-        },
-        {
-            type: 'inside',
-            yAxisIndex: 0,
-            start: 0,
-            end: 100
+            end: 100,
+            filterMode: 'none'
+        
         }
     ],
     series: [{
