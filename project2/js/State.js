@@ -30,9 +30,8 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
         {from:84, to:85, name: 'Machinery/Electrical'},
         {from:86, to:89, name: 'Transportation'},
         {from:90, to:97, name: 'Miscellaneous'}
-    ]
-    
-   console.log(HSCode[0].from);    
+    ];
+ 
 
 //注册地图
     echarts.registerMap('USA', usaJson, {});
@@ -107,7 +106,7 @@ Array.prototype.contains = function (needle) {
 var allCTCoor = function(data, year){
     var res = [];
     var i = 0;
-    if(year == '2013'){
+    if(year == 2013){
         data.forEach(function(dataItem,i){
             if (dataItem.countryd == "World") {
                 res.push({
@@ -137,7 +136,7 @@ var allCTCoor = function(data, year){
             }
         });
     }
-    else if(year == '2014'){
+    else if(year == 2014){
         data.forEach(function(dataItem,i){
             if (dataItem.countryd == "World") {
                 res.push({
@@ -167,7 +166,7 @@ var allCTCoor = function(data, year){
             }
         });
     }
-    else if(year == '2015'){
+    else if(year == 2015){
         data.forEach(function(dataItem,i){
             if (dataItem.countryd == "World") {
                 res.push({
@@ -197,7 +196,7 @@ var allCTCoor = function(data, year){
             }
         });
     }
-    else if(year == '2016'){
+    else if(year == 2016){
         data.forEach(function(dataItem,i){
             if (dataItem.countryd == "World") {
                 res.push({
@@ -335,6 +334,14 @@ var exportCTVal = function(dataItem, year){
             });
         });
     }  
+    return res;
+};
+//出口商品分类
+var exportCom = function(data){
+    var res = [];
+    data.forEach(function(dataItem){
+        
+    });
     return res;
 }
 
@@ -531,8 +538,8 @@ myChartM.setOption(optionMap);
 
 
 $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json',function(exportCTData) {
-
     console.log(year);
+console.log(allCTCoor(exportCTData,year));
         myChartLT.setOption({
             xAxis: {
                  data: CTNameforAxis(exportCTData)
@@ -544,7 +551,6 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
         });
 
        
-
         myChartM.setOption({
             series:[{
                 name:'Export',
@@ -557,7 +563,7 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
 $('input[type=radio][name=year]').on('change',function(){
     year = $(this).val();
     $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json').done(function(exportCTData) {
-          
+      
         myChartLT.setOption({
             xAxis: {
                  data: CTNameforAxis(exportCTData)
