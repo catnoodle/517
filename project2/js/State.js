@@ -1,6 +1,6 @@
 $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.geojson', function (usaJson) {
-$.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json', function(exportCTData) {
-$.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json', function(exportHSData){   
+
+   
     var domChartLeftTop = document.getElementById('leftTop');
     var myChartLT = echarts.init(domChartLeftTop);
 
@@ -9,6 +9,20 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
 
     var domMap = document.getElementById('map');
     var myChartM = echarts.init(domMap);
+
+    var year = document.getElementById('year');
+    var trade = document.getElementById('trade');
+    
+
+    
+    
+       
+    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json', function(exportHSData){
+       
+    });
+
+//注册地图
+    echarts.registerMap('USA', usaJson, {});
 
 //筛选年份
     var countCTVal  = function(data, year){
@@ -157,12 +171,12 @@ var CTNameforAxis = function(dataItem){
 };
 //输出贸易国家总额
 var exportCTVal = function(dataItem, year){
-    var CTname = CTNameforAxis(exportCTData);
+    var CTname = CTNameforAxis(dataItem);
     var res = [];
     if(year == 2013){
         CTname.forEach(function(element){
             var count = 0;
-            exportCTData.forEach(function(data){
+            dataItem.forEach(function(data){
                 if(data.countryd == element){
                     count += data.val2013; 
                 }
@@ -176,7 +190,7 @@ var exportCTVal = function(dataItem, year){
     else if(year == 2014){
         CTname.forEach(function(element){
             var count = 0;
-            exportCTData.forEach(function(data){
+            dataItem.forEach(function(data){
                 if(data.countryd == element){
                     count += data.val2014; 
                 }
@@ -190,7 +204,7 @@ var exportCTVal = function(dataItem, year){
     else if(year == 2015){
         CTname.forEach(function(element){
             var count = 0;
-            exportCTData.forEach(function(data){
+            dataItem.forEach(function(data){
                 if(data.countryd == element){
                     count += data.val2015; 
                 }
@@ -204,7 +218,7 @@ var exportCTVal = function(dataItem, year){
     else if(year == 2016){
         CTname.forEach(function(element){
             var count = 0;
-            exportCTData.forEach(function(data){
+            dataItem.forEach(function(data){
                 if(data.countryd == element){
                     count += data.val2016; 
                 }
@@ -234,9 +248,11 @@ var optionLT = {
         axisTick:{
             alignWithLabel: true,
         },
-        data: CTNameforAxis(exportCTData)
+      //  data: CTNameforAxis(exportCTData)
+      data:[]
     },
     yAxis: {},
+    grid:{x:'15%', y:'15%', width:'75%', top:'10%' },
     dataZoom: [
         {
             type: 'slider',
@@ -251,15 +267,159 @@ var optionLT = {
             end: 100,
             filterMode: 'none'
         
-        }
+        },
+        {
+            type: 'slider',
+            yAxisIndex: 0,
+            start: 0,
+            end: 100
+        },
     ],
     series: [{
         name: 'Export',
         type: 'bar',
-        data: exportCTVal(exportCTData,2013)
+        //data: exportCTVal(exportCTData,2013)
+        data:[]
     }]
 };
 myChartLT.setOption(optionLT);
+
+var path = 'arrow';
+var optionMap = {
+    backgroundColor: '#404a59',
+    title : { 
+        text: 'US Census Foreign Trade statistics',
+        subtext: 'Source: US Cencus',
+        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        left: 'right',
+        textStyle : {
+            color: '#fff'
+        }
+    },
+    tooltip : {
+        trigger: 'item'
+    },
+    legend: {
+        orient: 'vertical',
+        top: 'bottom',
+        left: 'right',
+        data:['Export', 'Import'],
+        textStyle: {
+            color: '#fff'
+        },
+        selectedMode: 'single'
+    },
+    geo: {
+        map: 'USA',
+        selectedMode:'multiple',
+        label: {
+            emphasis: {
+                show: false
+            },
+
+            normal:{
+                
+                color:'white',
+                position:'right'
+            }
+        },
+        roam: true,
+
+        itemStyle: {
+            normal: {
+                areaColor: '#323c48',
+                borderColor: '#404a59'
+            },
+
+            emphasis: {
+                areaColor: '#2a333d'
+            }
+        }
+    },
+    series:[
+    
+        {
+            name: 'point',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            rippleEffect: {//涟漪特效
+                brushType: 'stroke', //波纹绘制方式 stroke, fill
+            }, 
+            
+          //  silent:true,
+            hoverAnimation: true,
+            tooltip: {
+                emphasis:{
+                    show: true,
+                    position: 'right',
+                    formatter: function(params){
+                        return params.data.name+':'+params.data.val2013;
+                    }
+                }
+            },
+            showEffectOn:'render',
+            itemStyle: {
+                normal: {
+                    
+                    color: '#d8e6ff',
+                    shadowBlur:2,
+                    shadowColor:'#fff'
+                }
+            },
+            //data: allCTCoor(exportCTData)
+            data:[]
+            
+        }
+    ]
+    
+}
+myChartM.setOption(optionMap);
+
+$.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json').done(function(exportCTData) {
+    
+        myChartLT.setOption({
+            xAxis: {
+                 data: CTNameforAxis(exportCTData)
+            },
+            series: [{
+                name: 'Export',
+                data: exportCTVal(exportCTData,year)
+            }]
+        });
+
+        myChartM.setOption({
+            series:[{
+                name:'point',
+                data: allCTCoor(exportCTData)
+            }]
+        });
 });
+
+$('input[type=radio][name=year]').on('change',function(){
+    year = $(this).val();
+    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json').done(function(exportCTData) {
+        myChartLT.setOption({
+            xAxis: {
+                 data: CTNameforAxis(exportCTData)
+            },
+            series: [{
+                name: 'Export',
+                data: exportCTVal(exportCTData,year)
+            }]
+        });
+        myChartM.setOption({
+            series:[{
+                name:'point',
+                data: allCTCoor(exportCTData)
+            }]
+        });
+    });
 });
+
+$('input[type=radio][name=trade]').on('change',function(){
+    trade = $(this).val();
+    
+});
+
 });

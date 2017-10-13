@@ -25,19 +25,19 @@
     }
 
     #left {
-      height: 700px;
+      
       width: 380px;
       float: left;
-      margin-top:10px;
+      
     }
 
     #right {
-      height: 700px;
+     
       width: 380px;
       text-align: center;
       color: gray;
       float: right;
-      margin-top: 10px;
+      
       stroke: grey;
       stroke-width: 0.5px;
     }
@@ -48,7 +48,7 @@
     }
 
     #map {
-      height: 700px;
+      height: 600px;
       width: 630px;
       margin: 0 auto;
     }
@@ -57,9 +57,25 @@
       position: relative;
       top:100px;
       text-align: center;
-      color: gray;
-     
+      color: gray; 
     }
+
+    #Radios {
+      width:40%;
+      height: 30px;
+      padding: 5px;
+      margin-left:auto;
+      margin-right:auto;
+      
+    }
+    
+    input {
+      margin-right: 10px;
+      font-size: 20;
+      cursor: pointer;
+    }
+
+
   </style>
     
   </head>
@@ -96,6 +112,20 @@
     </div>
 
     <div id="container">
+      <div id="Radios">
+        <span >
+        Years: </t>
+          <input id="year" name="year" type="radio" value="2013" checked="checked" >2013</input>
+          <input id="year" name="year" type="radio" value="2014" >2014</input>
+          <input id="year" name="year" type="radio" value="2015" >2015</input>
+          <input id="year" name="year" type="radio" value="2016" >2016</input>
+        </span>
+        <span style="margin-left:80px;">
+        Trade model: 
+          <input id="trade" name="trade" type="radio" value="Export" checked="checked" >Export</input>
+          <input id="trade" name="trade" type="radio" value="Import" >Import</input>
+        </span>
+      </div>
       <div id="left">
         <div id="leftTop" ></div>
         <div id="leftButtom" ></div>
