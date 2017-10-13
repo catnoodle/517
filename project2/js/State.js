@@ -102,6 +102,21 @@ Array.prototype.contains = function (needle) {
     return false;
   }
 
+Array.prototype.contains = function (needle, select) {
+    if(!select){
+        for (i in this) {
+            if (this[i] == needle) return true;
+        }
+        return false;  
+    }
+    else{
+        for (i in this) {
+            if (this[i].name == needle) return true;
+        }
+        return false;  
+    }
+  }
+
 //导出国家名字和位置
 var allCTCoor = function(data, year){
     var res = [];
@@ -112,7 +127,7 @@ var allCTCoor = function(data, year){
                 res.push({
                     name: dataItem.statename,
                     value:dataItem.coor1,
-                    symbolSize: dataItem.val2013/50000 +2.5,
+                    symbolSize: dataItem.val2013/25000 +2.5,
                     val:dataItem.val2013,       
                 });
                 i++;
@@ -120,7 +135,7 @@ var allCTCoor = function(data, year){
             else{
                 if(dataItem.coor2){
                     var cName = dataItem.countryd;
-                    if(!res.contains(cName)){    
+                    if(!res.contains(cName,1)){    
                         res.push({
                             name: dataItem.countryd,
                             value: dataItem.coor2,
@@ -135,6 +150,7 @@ var allCTCoor = function(data, year){
                 }
             }
         });
+        return res;
     }
     else if(year == 2014){
         data.forEach(function(dataItem,i){
@@ -142,7 +158,7 @@ var allCTCoor = function(data, year){
                 res.push({
                     name: dataItem.statename,
                     value:dataItem.coor1,
-                    symbolSize: dataItem.val2014/50000 +2.5,
+                    symbolSize: dataItem.val2014/25000 +2.5,
                     val:dataItem.val2014,       
                 });
                 i++;
@@ -150,7 +166,7 @@ var allCTCoor = function(data, year){
             else{
                 if(dataItem.coor2){
                     var cName = dataItem.countryd;
-                    if(!res.contains(cName)){    
+                    if(!res.contains(cName,1)){    
                         res.push({
                             name: dataItem.countryd,
                             value: dataItem.coor2,
@@ -165,6 +181,7 @@ var allCTCoor = function(data, year){
                 }
             }
         });
+        return res;
     }
     else if(year == 2015){
         data.forEach(function(dataItem,i){
@@ -172,7 +189,7 @@ var allCTCoor = function(data, year){
                 res.push({
                     name: dataItem.statename,
                     value:dataItem.coor1,
-                    symbolSize: dataItem.val2015/50000 +2.5,
+                    symbolSize: dataItem.val2015/25000 +2.5,
                     val:dataItem.val2015,       
                 });
                 i++;
@@ -180,7 +197,7 @@ var allCTCoor = function(data, year){
             else{
                 if(dataItem.coor2){
                     var cName = dataItem.countryd;
-                    if(!res.contains(cName)){    
+                    if(!res.contains(cName,1)){    
                         res.push({
                             name: dataItem.countryd,
                             value: dataItem.coor2,
@@ -195,6 +212,7 @@ var allCTCoor = function(data, year){
                 }
             }
         });
+        return res;
     }
     else if(year == 2016){
         data.forEach(function(dataItem,i){
@@ -202,7 +220,7 @@ var allCTCoor = function(data, year){
                 res.push({
                     name: dataItem.statename,
                     value:dataItem.coor1,
-                    symbolSize: dataItem.val2016/50000 +2.5,
+                    symbolSize: dataItem.val2016/25000 +2.5,
                     val:dataItem.val2016,       
                 });
                 i++;
@@ -210,7 +228,7 @@ var allCTCoor = function(data, year){
             else{
                 if(dataItem.coor2){
                     var cName = dataItem.countryd;
-                    if(!res.contains(cName)){    
+                    if(!res.contains(cName,1)){    
                         res.push({
                             name: dataItem.countryd,
                             value: dataItem.coor2,
@@ -224,10 +242,12 @@ var allCTCoor = function(data, year){
                     }  
                 }
             }
+            
         });
+        return res;
     }
     
-    return res;
+    
 };
 
 //筛选出口的起始点
@@ -268,7 +288,7 @@ var pointData = function(data){
 var CTNameforAxis = function(dataItem){
     var res = [];
     dataItem.forEach(function(element){
-        if(!res.contains(element.countryd)&& element.countryd != 'World' && element.countryd !='Top 25'){
+        if(!res.contains(element.countryd,0)&& element.countryd != 'World' && element.countryd !='Top 25'){
             res.push(element.countryd);
         };     
     });
@@ -538,8 +558,7 @@ myChartM.setOption(optionMap);
 
 
 $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json',function(exportCTData) {
-    console.log(year);
-console.log(allCTCoor(exportCTData,year));
+
         myChartLT.setOption({
             xAxis: {
                  data: CTNameforAxis(exportCTData)
@@ -563,7 +582,7 @@ console.log(allCTCoor(exportCTData,year));
 $('input[type=radio][name=year]').on('change',function(){
     year = $(this).val();
     $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json').done(function(exportCTData) {
-      
+      console.log(allCTCoor(exportCTData,year));
         myChartLT.setOption({
             xAxis: {
                  data: CTNameforAxis(exportCTData)
