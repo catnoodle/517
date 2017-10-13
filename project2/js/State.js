@@ -10,16 +10,29 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
     var domMap = document.getElementById('map');
     var myChartM = echarts.init(domMap);
 
-    var year = document.getElementById('year');
-    var trade = document.getElementById('trade');
+    var year = document.getElementById('year').value;
+    var trade = document.getElementById('trade').value;
     
 
+    var HSCode = [
+        {from:01, to:05, name: 'Animal & Animal Products'},
+        {from:06, to:15, name: 'Vegetable Products'},
+        {from:16, to:24, name: 'Foodstuffs'},
+        {from:25, to:27, name: 'Mineral Products'},
+        {from:28, to:38, name: 'Chemicals & Allied Industries'},
+        {from:39, to:40, name: 'Plastics/Rubbers'},
+        {from:41, to:43, name: 'Raw Hides,Skins,Leather,&Furs'},
+        {from:44, to:49, name: 'Wood&Wood Products'},
+        {from:50, to:63, name: 'Textiles'},
+        {from:64, to:67, name: 'Footwear/Headgear'},
+        {from:68, to:71, name: 'Stone/Glass'},
+        {from:72, to:83, name: 'Metals'},
+        {from:84, to:85, name: 'Machinery/Electrical'},
+        {from:86, to:89, name: 'Transportation'},
+        {from:90, to:97, name: 'Miscellaneous'}
+    ]
     
-    
-       
-    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json', function(exportHSData){
-       
-    });
+   console.log(HSCode[0].from);    
 
 //注册地图
     echarts.registerMap('USA', usaJson, {});
@@ -91,37 +104,130 @@ Array.prototype.contains = function (needle) {
   }
 
 //导出国家名字和位置
-var allCTCoor = function(data){
+var allCTCoor = function(data, year){
     var res = [];
     var i = 0;
-    data.forEach(function(dataItem,i){
-        if (dataItem.countryd == "World") {
-            res.push({
-                name: dataItem.statename,
-                value:dataItem.coor1,
-                symbolSize: dataItem.val2013/50000 +2.5,
-                val2013:dataItem.val2013,       
-            });
-            i++;
-        }
-        else{
-            if(dataItem.coor2){
-                var cName = dataItem.countryd;
-                if(!res.contains(cName)){    
-                    res.push({
-                        name: dataItem.countryd,
-                        value: dataItem.coor2,
-                        symbolSize: 3,
-                        itemStyle:{
-                            normal:{
-                                color: '#0fb3ff',
-                            }}
-                    })
-                    i++;
-                }  
+    if(year == '2013'){
+        data.forEach(function(dataItem,i){
+            if (dataItem.countryd == "World") {
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.coor1,
+                    symbolSize: dataItem.val2013/50000 +2.5,
+                    val:dataItem.val2013,       
+                });
+                i++;
             }
-        }
-    });
+            else{
+                if(dataItem.coor2){
+                    var cName = dataItem.countryd;
+                    if(!res.contains(cName)){    
+                        res.push({
+                            name: dataItem.countryd,
+                            value: dataItem.coor2,
+                            symbolSize: 3,
+                            itemStyle:{
+                                normal:{
+                                    color: '#0fb3ff',
+                                }}
+                        })
+                        i++;
+                    }  
+                }
+            }
+        });
+    }
+    else if(year == '2014'){
+        data.forEach(function(dataItem,i){
+            if (dataItem.countryd == "World") {
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.coor1,
+                    symbolSize: dataItem.val2014/50000 +2.5,
+                    val:dataItem.val2014,       
+                });
+                i++;
+            }
+            else{
+                if(dataItem.coor2){
+                    var cName = dataItem.countryd;
+                    if(!res.contains(cName)){    
+                        res.push({
+                            name: dataItem.countryd,
+                            value: dataItem.coor2,
+                            symbolSize: 3,
+                            itemStyle:{
+                                normal:{
+                                    color: '#0fb3ff',
+                                }}
+                        })
+                        i++;
+                    }  
+                }
+            }
+        });
+    }
+    else if(year == '2015'){
+        data.forEach(function(dataItem,i){
+            if (dataItem.countryd == "World") {
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.coor1,
+                    symbolSize: dataItem.val2015/50000 +2.5,
+                    val:dataItem.val2015,       
+                });
+                i++;
+            }
+            else{
+                if(dataItem.coor2){
+                    var cName = dataItem.countryd;
+                    if(!res.contains(cName)){    
+                        res.push({
+                            name: dataItem.countryd,
+                            value: dataItem.coor2,
+                            symbolSize: 3,
+                            itemStyle:{
+                                normal:{
+                                    color: '#0fb3ff',
+                                }}
+                        })
+                        i++;
+                    }  
+                }
+            }
+        });
+    }
+    else if(year == '2016'){
+        data.forEach(function(dataItem,i){
+            if (dataItem.countryd == "World") {
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.coor1,
+                    symbolSize: dataItem.val2016/50000 +2.5,
+                    val:dataItem.val2016,       
+                });
+                i++;
+            }
+            else{
+                if(dataItem.coor2){
+                    var cName = dataItem.countryd;
+                    if(!res.contains(cName)){    
+                        res.push({
+                            name: dataItem.countryd,
+                            value: dataItem.coor2,
+                            symbolSize: 3,
+                            itemStyle:{
+                                normal:{
+                                    color: '#0fb3ff',
+                                }}
+                        })
+                        i++;
+                    }  
+                }
+            }
+        });
+    }
+    
     return res;
 };
 
@@ -248,7 +354,6 @@ var optionLT = {
         axisTick:{
             alignWithLabel: true,
         },
-      //  data: CTNameforAxis(exportCTData)
       data:[]
     },
     yAxis: {},
@@ -278,11 +383,63 @@ var optionLT = {
     series: [{
         name: 'Export',
         type: 'bar',
-        //data: exportCTVal(exportCTData,2013)
         data:[]
     }]
 };
 myChartLT.setOption(optionLT);
+
+
+$.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json',function(exportHSData){
+    var optionLB = {
+        title: {
+            text: 'Export Commodities',
+            left: 'center',
+            textStyle : {
+                color: '#000'
+            }
+        },
+        tooltip: {},
+        xAxis: {
+            axisTick:{
+                alignWithLabel: true,
+            },
+          data:[]
+        },
+        yAxis: {},
+        grid:{x:'15%', y:'15%', width:'75%', top:'10%' },
+        dataZoom: [
+            {
+                type: 'slider',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100,
+                filterMode: 'none'
+            
+            },
+            {
+                type: 'slider',
+                yAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+        ],
+        series: [{
+            name: 'Export',
+            type: 'bar',
+            data:[]
+        }]
+    };
+    myChartLB.setOption(optionLB);
+});
+
+
+
 
 var path = 'arrow';
 var optionMap = {
@@ -311,7 +468,7 @@ var optionMap = {
     },
     geo: {
         map: 'USA',
-        selectedMode:'multiple',
+        selectedMode:'single',
         label: {
             emphasis: {
                 show: false
@@ -339,13 +496,11 @@ var optionMap = {
     series:[
     
         {
-            name: 'point',
-            type: 'effectScatter',
+            name: 'Export',
+            type: 'scatter',
             coordinateSystem: 'geo',
             zlevel: 2,
-            rippleEffect: {//涟漪特效
-                brushType: 'stroke', //波纹绘制方式 stroke, fill
-            }, 
+            
             
           //  silent:true,
             hoverAnimation: true,
@@ -353,18 +508,15 @@ var optionMap = {
                 emphasis:{
                     show: true,
                     position: 'right',
-                    formatter: function(params){
-                        return params.data.name+':'+params.data.val2013;
-                    }
+                    
                 }
             },
-            showEffectOn:'render',
+            
             itemStyle: {
                 normal: {
                     
                     color: '#d8e6ff',
-                    shadowBlur:2,
-                    shadowColor:'#fff'
+
                 }
             },
             //data: allCTCoor(exportCTData)
@@ -376,8 +528,11 @@ var optionMap = {
 }
 myChartM.setOption(optionMap);
 
-$.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json').done(function(exportCTData) {
-    
+
+
+$.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json',function(exportCTData) {
+
+    console.log(year);
         myChartLT.setOption({
             xAxis: {
                  data: CTNameforAxis(exportCTData)
@@ -388,17 +543,21 @@ $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/
             }]
         });
 
+       
+
         myChartM.setOption({
             series:[{
-                name:'point',
-                data: allCTCoor(exportCTData)
+                name:'Export',
+                data: allCTCoor(exportCTData,year)
             }]
         });
+
 });
 
 $('input[type=radio][name=year]').on('change',function(){
     year = $(this).val();
     $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json').done(function(exportCTData) {
+          
         myChartLT.setOption({
             xAxis: {
                  data: CTNameforAxis(exportCTData)
@@ -410,8 +569,8 @@ $('input[type=radio][name=year]').on('change',function(){
         });
         myChartM.setOption({
             series:[{
-                name:'point',
-                data: allCTCoor(exportCTData)
+                name:'Export',
+                data: allCTCoor(exportCTData,year)
             }]
         });
     });
