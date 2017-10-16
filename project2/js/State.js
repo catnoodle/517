@@ -7,7 +7,7 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
     var domChartLeftButtom = document.getElementById('leftButtom');
     var myChartLB = echarts.init(domChartLeftButtom);
 
-    var domMap = document.getElementById('map');
+    var domMap = document.getElementById('mapUp');
     var myChartM = echarts.init(domMap);
 
     var domChartRightTop = document.getElementById('rightTop');
@@ -113,15 +113,21 @@ var countCTVal  = function(data, year){
 
 //筛选是否有该名字
 Array.prototype.contains = function (needle, select) {
-    if(!select){
+    if(select == 0){
         for (i in this) {
             if (this[i] == needle) return true;
         }
         return false;  
     }
-    else{
+    else if(select == 1){
         for (i in this) {
             if (this[i].name == needle) return true;
+        }
+        return false;  
+    }
+    else if(select == 2){
+        for (i in this) {
+            if (this[i].statename == needle) return true;
         }
         return false;  
     }
@@ -259,18 +265,6 @@ var allCTCoor = function(data, year){
     
     
 };
-
-var CTNameforFilter = function(data){
-    CTData.forEach(function(element){
-        if(element.countryd == "World"){
-            if(data == element.statename){
-                return true;
-            }
-        }
-    });
-    return false;
-}
-
 //筛选出口的起始点
 var convertData = function (data) {
     var res = [];
@@ -730,9 +724,40 @@ var optionMap = {
     tooltip : {
         trigger: 'item',
         formatter : function (params) {
-            return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+            if(CTData.contains(params.name,2)){
+                return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+            }
+            else{
+                return params.name;
+            }
+            
         }
     },  
+    geo: {
+        map: 'USA',
+        roam: true,
+        selectedMode:'single',
+        center:[-117,39],
+        zoom:4,
+        scaleLimit:{
+            min:1.2,
+            max:100
+        },
+        itemStyle:{
+            normal:{
+                areaColor: '#323c48',
+                borderColor: '#404a59'
+            },
+            emphasis:{
+                borderColor: '#fff',
+                //color:'rgba(128, 128, 128, 1)',
+                areaColor: '#323c48',
+                opacity:'0.5',
+                label:{show:false}
+            }
+        },
+        label:false
+    },
     series:[
       /* { 
         
@@ -759,49 +784,70 @@ var optionMap = {
         {
             name: chartTitleName,
             type: 'map',
-            roam: true,
-            map: 'USA',
-            selectedMode:'single',
-            itemStyle:{
-                normal:{
-                    areaColor: '#323c48',
-                    borderColor: '#404a59'
-                },
-                emphasis:{
-                    borderColor: '#fff',
-                    //color:'rgba(128, 128, 128, 1)',
-                    areaColor: '#323c48',
-                    opacity:'0.5',
-                    label:{show:false}
+            geoIndex: 0,
+            data:areaColorValue(CTData,year)
+        },
+        {
+            name: chartTitleName + ' effect',
+            type: 'lines',
+            zlevel: 1,
+            effect: {
+                show: true,
+                period: 6,
+                trailLength: 0.7,
+                color: '#fff',
+                symbolSize: 3
+            },
+            lineStyle: {
+                normal: {
+                    color: 'red',
+                    width: 0,
+                    curveness: 0.2
                 }
             },
-            center:[-117,39],
-            zoom:4,
-            scaleLimit:{
-                min:1.2,
-                max:100
+            data:[]
+        },
+        {
+            name: chartTitleName + ' partners',
+            type: 'lines',
+            zlevel: 2,
+            symbol: ['none', 'arrow'],
+            symbolSize: 10,
+            effect: {
+                show: true,
+                period: 6,
+                trailLength: 0,
+                //symbol: planePath,
+                symbolSize: 15
             },
-            data:areaColorValue(CTData,year)
-        }
+            lineStyle: {
+                normal: {
+                    color: 'red',
+                    width: 1,
+                    opacity: 0.6,
+                    curveness: 0.2
+                }
+            },
+            data: []
+        },
+
     ]  
 }
 myChartM.setOption(optionMap);
 
 var mapClickFunction = function(params){
-    console.log(CTNameforFilter(params.name));
-    if(!CTNameforFilter(params.name)){ 
-        return ;
-    }
+    
+    if(CTData.contains(params.name,2)){ 
     var CTres = CTData.filter(function(data){return data.statename == params.name});
     var HSres = HSData.filter(function(data){return data.statename == params.name});
 
     var optionRT = {
         title: {
-            text: params.name+" "+chartTitleName+'('+ year +')'+' Countries',
+            text: params.name+" Top25 "+chartTitleName+'('+ year +')'+' Countries',
             left: 'center',
             textStyle : {
                 color: '#000',
-                fontSize: 14
+                fontSize: 12
             }
         },
         tooltip: {
@@ -849,11 +895,11 @@ var mapClickFunction = function(params){
 
     var optionRB = {
         title: {
-            text: params.name+" "+chartTitleName+'('+ year +')'+' Commodities',
+            text: params.name+" Top25 "+chartTitleName+'('+ year +')'+' Commodities',
             left: 'center',
             textStyle : {
                 color: '#000',
-                fontSize: 14
+                fontSize: 12
             }
         },
         tooltip: {  
@@ -905,14 +951,91 @@ var mapClickFunction = function(params){
         }]
     }
     myChartRB.setOption(optionRB);
-/*
+
     myChartM.setOption({
-        series:[{
-            name:params.name,
-            type:'scatter'
-        }]
+        geo:{
+            center:[0,0],
+            zoom:0,
+            scaleLimit:{
+                min:1.2,
+                max:100
+            }
+        },
+
+        series:[
+        {
+            name: chartTitleName + ' effect',
+            data: convertData(CTData.filter(function(d){return d.statename==params.name;}))
+        },
+        {
+            name: chartTitleName + ' partners',
+            data: convertData(CTData.filter(function(d){return d.statename==params.name;}))
+        }
+        /*
+        {
+            name: item[0] + ' Top10',
+            type: 'lines',
+            zlevel: 2,
+            symbol: ['none', 'arrow'],
+            symbolSize: 10,
+            effect: {
+                show: true,
+                period: 6,
+                trailLength: 0,
+                symbol: planePath,
+                symbolSize: 15
+            },
+            lineStyle: {
+                normal: {
+                    color: color[i],
+                    width: 1,
+                    opacity: 0.6,
+                    curveness: 0.2
+                }
+            },
+            data: convertData(item[1])
+        },
+        {
+            name: item[0] + ' Top10',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}'
+                }
+            },
+            symbolSize: function (val) {
+                return val[2] / 8;
+            },
+            itemStyle: {
+                normal: {
+                    color: color[i]
+                }
+            },
+            data: item[1].map(function (dataItem) {
+                return {
+                    name: dataItem[1].name,
+                    value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                };
+            })
+        }
+    */
+    ]
     });
-*/
+
+}
+else{
+    
+        alert("This is not in US!");
+        return ;
+    
+}
 };
 
 var mapClick = function(){

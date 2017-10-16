@@ -37,7 +37,6 @@
       text-align: center;
       color: gray;
       float: right;
-      
       stroke: grey;
       stroke-width: 0.5px;
     }
@@ -47,8 +46,8 @@
       width:  360px;
     }
 
-    #map {
-      height: 600px;
+    .map {
+      height: 300px;
       width: 630px;
       margin: 0 auto;
       position: relative;
@@ -137,7 +136,13 @@
           <div id="rightTop" ></div>       
           <div id="rightButtom" ></div>
       </div>
-      <div id="map">
+      <div id="mapUp" class="map">
+      <div class="loading">
+          <i class="icon-spinner icon-spin icon-large"></i>
+            Loading data from Google Spreadsheets...
+      </div>
+    </div>
+    <div id="mapDown" class="map">
       <div class="loading">
           <i class="icon-spinner icon-spin icon-large"></i>
             Loading data from Google Spreadsheets...
