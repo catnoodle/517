@@ -112,13 +112,6 @@ var countCTVal  = function(data, year){
     };
 
 //筛选是否有该名字
-Array.prototype.contains = function (needle) {
-    for (i in this) {
-      if (this[i] == needle) return true;
-    }
-    return false;
-  }
-
 Array.prototype.contains = function (needle, select) {
     if(!select){
         for (i in this) {
@@ -266,6 +259,17 @@ var allCTCoor = function(data, year){
     
     
 };
+
+var CTNameforFilter = function(data){
+    CTData.forEach(function(element){
+        if(element.countryd == "World"){
+            if(data == element.statename){
+                return true;
+            }
+        }
+    });
+    return false;
+}
 
 //筛选出口的起始点
 var convertData = function (data) {
@@ -775,7 +779,7 @@ var optionMap = {
             zoom:4,
             scaleLimit:{
                 min:1.2,
-                max:20
+                max:100
             },
             data:areaColorValue(CTData,year)
         }
@@ -783,8 +787,11 @@ var optionMap = {
 }
 myChartM.setOption(optionMap);
 
-var mapClick = function(){
-    myChartM.on('click',function(params){
+var mapClickFunction = function(params){
+    console.log(CTNameforFilter(params.name));
+    if(!CTNameforFilter(params.name)){ 
+        return ;
+    }
     var CTres = CTData.filter(function(data){return data.statename == params.name});
     var HSres = HSData.filter(function(data){return data.statename == params.name});
 
@@ -898,7 +905,20 @@ var mapClick = function(){
         }]
     }
     myChartRB.setOption(optionRB);
-});
+/*
+    myChartM.setOption({
+        series:[{
+            name:params.name,
+            type:'scatter'
+        }]
+    });
+*/
+};
+
+var mapClick = function(){
+    myChartM.on('click',function(params){
+       return mapClickFunction(params);
+    });
 };
 
 mapClick();
