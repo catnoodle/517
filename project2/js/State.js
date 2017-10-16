@@ -1,5 +1,25 @@
 $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.geojson', function (usaJson) {
 
+    $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.json', function (USAJson) {
+    
+        echarts.registerMap('usa', USAJson, {
+            Alaska: {              // 把阿拉斯加移到美国主大陆左下方
+                left: -131,
+                top: 25,
+                width: 15
+            },
+            Hawaii: {
+                left: -110,        // 夏威夷
+                top: 28,
+                width: 5
+            },
+            'Puerto Rico': {       // 波多黎各
+                left: -76,
+                top: 26,
+                width: 2
+            }
+        });
+
    
     var domChartLeftTop = document.getElementById('leftTop');
     var myChartLT = echarts.init(domChartLeftTop);
@@ -9,6 +29,9 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
 
     var domMap = document.getElementById('mapUp');
     var myChartM = echarts.init(domMap);
+
+    var domMapDown = document.getElementById('mapDown');
+    var myChartMD = echarts.init(domMapDown);
 
     var domChartRightTop = document.getElementById('rightTop');
     var myChartRT = echarts.init(domChartRightTop);
@@ -684,31 +707,16 @@ var optionLB = {
 myChartLB.setOption(optionLB);
 
 //画出地图
-var path = 'arrow';
+
 var optionMap = {
     backgroundColor: '#404a59',
     title : { 
-        text: 'US Census Foreign Trade statistics',
-        subtext: 'Source: US Cencus',
-        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        text: 'Trade Route Map',
         left: 'right',
         textStyle : {
-            color: '#fff'
+            color: '#fff',
+            fontSize:12
         }
-    },
- 
-    visualMap: {
-        left: 'left',
-        min: 0,
-        max: 300000,
-        inRange: {
-            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
-        },
-        text:['High','Low'],
-        textStyle:{
-            color:"red"
-        },           // 文本，默认为数值文本
-        calculable: true   
     },
     toolbox: {
         show : true,
@@ -724,25 +732,20 @@ var optionMap = {
     tooltip : {
         trigger: 'item',
         formatter : function (params) {
-            if(CTData.contains(params.name,2)){
-                return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
-            }
-            else{
-                return params.name;
-            }
-            
+            return params.name;
         }
     },  
     geo: {
         map: 'USA',
         roam: true,
         selectedMode:'single',
-        center:[-117,39],
-        zoom:4,
+        center:[0,15],
+        zoom:0,
         scaleLimit:{
             min:1.2,
             max:100
         },
+        //silent: true,  
         itemStyle:{
             normal:{
                 areaColor: '#323c48',
@@ -753,40 +756,11 @@ var optionMap = {
                 //color:'rgba(128, 128, 128, 1)',
                 areaColor: '#323c48',
                 opacity:'0.5',
-                label:{show:false}
+                label:{show:true}
             }
         },
-        label:false
     },
     series:[
-      /* { 
-        
-            name: 'Export',
-            type: 'map',
-            coordinateSystem: 'geo',
-            zlevel: 2,   
-          //  silent:true,
-            hoverAnimation: true,
-            tooltip: {
-                emphasis:{
-                    show: true,
-                    position: 'right',                   
-                }
-            },    
-            itemStyle: {
-                normal: {            
-                    color: '#d8e6ff',
-                }
-            },
-            //data: allCTCoor(exportCTData)
-            data:[]     
-}*/
-        {
-            name: chartTitleName,
-            type: 'map',
-            geoIndex: 0,
-            data:areaColorValue(CTData,year)
-        },
         {
             name: chartTitleName + ' effect',
             type: 'lines',
@@ -835,9 +809,90 @@ var optionMap = {
 }
 myChartM.setOption(optionMap);
 
-var mapClickFunction = function(params){
-    
-    if(CTData.contains(params.name,2)){ 
+var path = 'arrow';
+var optionMD = {
+    backgroundColor: '#404a59',
+    title : { 
+        text: 'US Census Foreign Trade statistics',
+        subtext: 'Source: US Cencus',
+        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        left: 'right',
+        textStyle : {
+            color: '#fff'
+        }
+    },
+    visualMap: {
+        left: 'left',
+        min: 0,
+        max: 300000,
+        inRange: {
+            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+        },
+        text:['High','Low'],
+        textStyle:{
+            color:"red"
+        },           // 文本，默认为数值文本
+        calculable: true   
+    },
+    toolbox: {
+        show : true,
+        orient : 'vertical',
+        left: 'right',
+        top: 'center',
+        feature : {
+            mark : {show: true},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter : function (params) {
+            return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+        }
+    },  
+    geo: {
+        map: 'usa',
+        roam: true,
+        selectedMode:'single',
+        center:[-100,39],
+        zoom:0,
+        scaleLimit:{
+            min:-1,
+            max:4
+        },
+        itemStyle:{
+            normal:{
+                areaColor: '#323c48',
+                borderColor: '#404a59',
+                borderWidth: 1
+            },
+            emphasis:{
+                borderColor: '#fff',
+                areaColor: '#323c48',
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 20,
+                opacity:'0.5',
+                label:{show:false}
+            }
+        },
+        label:false
+    },
+    series:[
+        {
+            name: chartTitleName,
+            type: 'map',
+            geoIndex: 0,
+            data:areaColorValue(CTData,year)
+        }
+    ]
+};
+myChartMD.setOption(optionMD);
+
+
+var mapClickFunction = function(params){ 
+    console.log(params.name);
     var CTres = CTData.filter(function(data){return data.statename == params.name});
     var HSres = HSData.filter(function(data){return data.statename == params.name});
 
@@ -954,7 +1009,7 @@ var mapClickFunction = function(params){
 
     myChartM.setOption({
         geo:{
-            center:[0,0],
+            center:[0,15],
             zoom:0,
             scaleLimit:{
                 min:1.2,
@@ -971,75 +1026,13 @@ var mapClickFunction = function(params){
             name: chartTitleName + ' partners',
             data: convertData(CTData.filter(function(d){return d.statename==params.name;}))
         }
-        /*
-        {
-            name: item[0] + ' Top10',
-            type: 'lines',
-            zlevel: 2,
-            symbol: ['none', 'arrow'],
-            symbolSize: 10,
-            effect: {
-                show: true,
-                period: 6,
-                trailLength: 0,
-                symbol: planePath,
-                symbolSize: 15
-            },
-            lineStyle: {
-                normal: {
-                    color: color[i],
-                    width: 1,
-                    opacity: 0.6,
-                    curveness: 0.2
-                }
-            },
-            data: convertData(item[1])
-        },
-        {
-            name: item[0] + ' Top10',
-            type: 'effectScatter',
-            coordinateSystem: 'geo',
-            zlevel: 2,
-            rippleEffect: {
-                brushType: 'stroke'
-            },
-            label: {
-                normal: {
-                    show: true,
-                    position: 'right',
-                    formatter: '{b}'
-                }
-            },
-            symbolSize: function (val) {
-                return val[2] / 8;
-            },
-            itemStyle: {
-                normal: {
-                    color: color[i]
-                }
-            },
-            data: item[1].map(function (dataItem) {
-                return {
-                    name: dataItem[1].name,
-                    value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
-                };
-            })
-        }
-    */
     ]
     });
-
-}
-else{
-    
-        alert("This is not in US!");
-        return ;
-    
-}
+    console.log(convertData(CTData.filter(function(d){return d.statename==params.name;})));
 };
 
 var mapClick = function(){
-    myChartM.on('click',function(params){
+    myChartMD.on('click',function(params){
        return mapClickFunction(params);
     });
 };
@@ -1060,7 +1053,7 @@ var setUpCharts = function(){
         }]
     });
          
-    myChartM.setOption({
+    myChartMD.setOption({
         series:[{
             name:chartTitleName,
             data: areaColorValue(CTData,year)
@@ -1117,4 +1110,5 @@ $('input[type=radio][name=year]').on('change',function(){
 
 
 
+});
 });
