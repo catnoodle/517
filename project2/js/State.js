@@ -289,17 +289,31 @@ var allCTCoor = function(data, year){
     
 };
 //筛选出口的起始点
-var convertData = function (data) {
+var convertData = function (data,select) {
     var res = [];
-    data.forEach(function(dataItem){
-        if (dataItem.coor2) {
-            res.push({
-                fromName: dataItem.statename,
-                toName: dataItem.countryd,
-                coords: [dataItem.coor1, dataItem.coor2]
-            });
-        }
-    });
+    if(select == "Export"){
+        data.forEach(function(dataItem){
+            if (dataItem.coor2) {
+                res.push({
+                    fromName: dataItem.statename,
+                    toName: dataItem.countryd,
+                    coords: [dataItem.coor1, dataItem.coor2]
+                });
+            }
+        });
+    }
+    else if(select == "Import"){
+        data.forEach(function(dataItem){
+            if (dataItem.coor2) {
+                res.push({
+                    fromName: dataItem.countryd,
+                    toName: dataItem.statename,
+                    coords: [dataItem.coor2, dataItem.coor1]
+                });
+            }
+        });
+    }
+    
     return res;
     };
 
@@ -593,7 +607,100 @@ var areaColorValue = function(data,year){
     }
     return res;
 }
-
+//输出HScode单一目录下的各项总值
+var HSCount = function(data,year){
+    var res = HSCode.filter(function(d){return d.name == data});
+    var count = 0;
+    var res2 = [];
+    if(year == 2013){
+        HSData.forEach(function(d){
+            var number = cutNumber(d.hs6);
+            if(res[0].from<=number&&number<=res[0].to){
+                if(!res2.contains(d.abbreviatn,1)){
+                    res2.push({
+                        name:d.abbreviatn,
+                        value:d.val2013,
+                        HS6:d.hs6
+                    });
+                }
+                else {
+                    res2.forEach(function(d2){
+                        if(d2.name == d.abbreviatn){
+                            d2.value = parseFloat(parseFloat(d2.value + d.val2013).toFixed(2));
+                        }
+                    });
+                }
+            }
+            
+        });
+    }
+    else if(year == 2014){
+        HSData.forEach(function(d){
+            var number = cutNumber(d.hs6);
+            if(res[0].from<=number&&number<=res[0].to){
+                if(!res2.contains(d.abbreviatn,1)){
+                    res2.push({
+                        name:d.abbreviatn,
+                        value:d.val2014,
+                        HS6:d.hs6
+                    });
+                }
+                else {
+                    res2.forEach(function(d2){
+                        if(d2.name == d.abbreviatn){
+                            d2.value = parseFloat(parseFloat(d2.value + d.val2014).toFixed(2));
+                        }
+                    });
+                }
+            }
+            
+        });
+    }
+    else if(year == 2015){
+        HSData.forEach(function(d){
+            var number = cutNumber(d.hs6);
+            if(res[0].from<=number&&number<=res[0].to){
+                if(!res2.contains(d.abbreviatn,1)){
+                    res2.push({
+                        name:d.abbreviatn,
+                        value:d.val2015,
+                        HS6:d.hs6
+                    });
+                }
+                else {
+                    res2.forEach(function(d2){
+                        if(d2.name == d.abbreviatn){
+                            d2.value = parseFloat(parseFloat(d2.value + d.val2015).toFixed(2));
+                        }
+                    });
+                }
+            }
+            
+        });
+    }
+    else if(year == 2016){
+        HSData.forEach(function(d){
+            var number = cutNumber(d.hs6);
+            if(res[0].from<=number&&number<=res[0].to){
+                if(!res2.contains(d.abbreviatn,1)){
+                    res2.push({
+                        name:d.abbreviatn,
+                        value:d.val2016,
+                        HS6:d.hs6
+                    });
+                }
+                else {
+                    res2.forEach(function(d2){
+                        if(d2.name == d.abbreviatn){
+                            d2.value = parseFloat(parseFloat(d2.value + d.val2016).toFixed(2));
+                        }
+                    });
+                }
+            }
+        });
+    }
+    return res2;
+}
 
 //左上overview
 var optionLT = {
@@ -605,6 +712,12 @@ var optionLT = {
         }
     },
     tooltip: {
+        position: function (pos, params, dom, rect, size) {
+            // 鼠标在左侧时 tooltip 显示到右侧，鼠标在右侧时 tooltip 显示到左侧。
+            var obj = {top:pos[1]};
+            obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+            return obj;
+        },
         formatter : function (params) {
             return "US "+params.seriesName+"("+year+")" +' Countries'+ '<br/>' + params.name + ' : $' + params.value+'M';
         }
@@ -656,16 +769,61 @@ var optionLB = {
                 color: '#000'
             }
         },
+        toolbox: {
+            show : true,
+            //orient : 'vertical',
+            left: 'right',
+            top: 'top',
+            feature : {
+                mark : {show: true},
+                restore : {show: true,title:"Reset"},
+                saveAsImage : {show: false},
+                myTool1: {
+                    show: false,
+                    title: 'Back',
+                    icon: 'path://M11.3,0c0.1,0.7,0.3,1.3,0.6,1.9c0.6,1.2,1.2,2.4,2,3.6c1.4,2.1,2.7,4.3,4.1,6.4c1,1.5,1.9,3.1,2.6,4.7c0.8,1.5,1.3,3.1,1.5,4.8c0.7,4.2-1.1,8.4-4.6,10.7c-2,1.4-4.5,2-6.9,1.8c-1.6,0-3.1-0.4-4.5-1.2c-3.1-1.6-5.2-4.5-5.7-7.9c-0.3-2-0.1-4.1,0.7-6.1c0.7-1.9,1.6-3.8,2.7-5.5C5.3,11,6.7,8.7,8.2,6.4c1-1.5,1.9-3.2,2.6-4.9C11,1,11.1,0.6,11.3,0.1L11.3,0zM9.9,31.1h0.4c0.5,0,0.9-0.5,0.9-1c0-0.1,0-0.1,0-0.2c-0.1-0.4-0.5-0.7-1-0.7c-3-0.1-5.4-2.5-5.4-5.6c0-0.5-0.4-0.9-0.9-0.9c0,0,0,0-0.1,0c-0.5,0-0.9,0.4-0.9,1l0,0c0,0.3,0,0.6,0,0.9C3.3,28.2,6.3,30.9,9.9,31.1z',
+                    onclick: function(){
+                        myChartLB.setOption({
+                            title: {
+                                text: chartTitleName+'('+ year +')'+' Commodities',
+                                subtext:null
+                            },
+                            toolbox: {
+                                feature : {
+                                    myTool1 : {show: false},
+                                }
+                            },
+                            xAxis: {
+                                
+                                data:HSNameforAxis(HSCode,0)
+                            },
+                            series: [
+                                {
+                                    name: chartTitleName,
+                                    type: 'bar',
+                                    data:exportCom(HSData,year,0)
+                                },
+                                {
+                                    name:chartTitleName+"details",
+                                    type: 'bar',
+                                    data:[]
+                                    
+                                }
+                            ]
+                        });
+                    }
+                },
+            }
+        },
         tooltip: {  
             position: function (pos, params, dom, rect, size) {
                 // 鼠标在左侧时 tooltip 显示到右侧，鼠标在右侧时 tooltip 显示到左侧。
-                console.log(pos);
                 var obj = {top:pos[1]};
                 obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
                 return obj;
             },
             formatter : function (params) {
-                return "US "+params.seriesName+"("+year+")"+ ' Commodities' + '<br/>' + params.name + ' : $' + params.value+'M';
+                return "US "+params.seriesName+"("+year+")"+ ' Commodities' + '<br/>' + params.name + ' :' + '<br/>'+'$'+ params.value+'M';
             }
         },
         xAxis: {
@@ -702,12 +860,16 @@ var optionLB = {
             name: chartTitleName,
             type: 'bar',
             data:exportCom(HSData,year,0)
-        }]
+        },{
+            name: chartTitleName+"details",
+            type:'bar',
+            data:[]
+        }
+        ]
     };
 myChartLB.setOption(optionLB);
 
 //画出地图
-
 var optionMap = {
     backgroundColor: '#404a59',
     title : { 
@@ -725,8 +887,8 @@ var optionMap = {
         top: 'center',
         feature : {
             mark : {show: true},
-            restore : {show: true},
-            saveAsImage : {show: true}
+            restore : {show: true,title:"Reset"},
+            saveAsImage : {show: false}
         }
     },
     tooltip : {
@@ -841,8 +1003,8 @@ var optionMD = {
         top: 'center',
         feature : {
             mark : {show: true},
-            restore : {show: true},
-            saveAsImage : {show: true}
+            restore : {show: true,title:"Reset"},
+            saveAsImage : {show: false}
         }
     },
     tooltip : {
@@ -892,7 +1054,6 @@ myChartMD.setOption(optionMD);
 
 
 var mapClickFunction = function(params){ 
-    console.log(params.name);
     var CTres = CTData.filter(function(data){return data.statename == params.name});
     var HSres = HSData.filter(function(data){return data.statename == params.name});
 
@@ -1020,15 +1181,14 @@ var mapClickFunction = function(params){
         series:[
         {
             name: chartTitleName + ' effect',
-            data: convertData(CTData.filter(function(d){return d.statename==params.name;}))
+            data: convertData(CTData.filter(function(d){return d.statename==params.name;}),chartTitleName)
         },
         {
             name: chartTitleName + ' partners',
-            data: convertData(CTData.filter(function(d){return d.statename==params.name;}))
+            data: convertData(CTData.filter(function(d){return d.statename==params.name;}),chartTitleName)
         }
     ]
     });
-    console.log(convertData(CTData.filter(function(d){return d.statename==params.name;})));
 };
 
 var mapClick = function(){
@@ -1036,8 +1196,46 @@ var mapClick = function(){
        return mapClickFunction(params);
     });
 };
-
 mapClick();
+
+var chartLBFunction = function(){
+    myChartLB.on('click', function(params){
+        myChartLB.setOption({
+            title: {
+                subtext: params.name+'('+ year +')'+' Details',
+                subtextStyle:{
+                    color:"#000",
+                    fontStyle:"bold",
+                    fontSize:12
+                }
+            },
+            toolbox: {
+                feature : {
+                    myTool1 : {show: true},
+                }
+            },
+            xAxis: {
+                data:HSNameforAxis(HSCount(params.name,year),0)
+            },
+            series: [
+                {
+                    name: chartTitleName,
+                    type: 'bar',
+                    data:[]
+                },
+                {
+                    name:chartTitleName+"details",
+                    type: 'bar',
+                    data:HSCount(params.name,year)
+                    
+                }
+            ]
+        });
+    });
+}
+
+chartLBFunction();
+
 
 var setUpCharts = function(){
     myChartLT.setOption({
@@ -1063,17 +1261,40 @@ var setUpCharts = function(){
     myChartLB.setOption({
         title: {
             text: chartTitleName+'('+ year +')'+' Commodities',
+            subtext:null
         },
         xAxis: {
             
             data:HSNameforAxis(HSCode,0)
         },
-        series: [{
-            name: chartTitleName,
-            type: 'bar',
-            data:exportCom(HSData,year,0)
-        }]
+        series: [
+            {
+                name: chartTitleName,
+                type: 'bar',
+                data:exportCom(HSData,year,0)
+            },
+            {
+                name:chartTitleName+"details",
+                type: 'bar',
+                data:[]
+                
+            }
+        ]
     });
+
+    myChartM.setOption({
+        series:[
+        {
+            name: chartTitleName + ' effect',
+            data: []
+        },
+        {
+            name: chartTitleName + ' partners',
+            data: []
+        }
+    ]
+    });
+
 };
 
 
