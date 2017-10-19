@@ -1,6 +1,6 @@
-$.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.geojson', function (usaJson) {
 
-    $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.json', function (USAJson) {
+$.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.geojson', function (usaJson) {
+$.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.json', function (USAJson) {
     
         echarts.registerMap('usa', USAJson, {
             Alaska: {              // 把阿拉斯加移到美国主大陆左下方
@@ -19,7 +19,7 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
                 width: 2
             }
         });
-
+   
    
     var domChartLeftTop = document.getElementById('leftTop');
     var myChartLT = echarts.init(domChartLeftTop);
@@ -43,14 +43,23 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
     var trade = document.getElementById('trade').value;
     
     $.ajaxSettings.async=false;
-    var CTData,HSData,chartTitleName;
-    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json',function(exportHSData){
-        HSData = exportHSData;
+    var CTData,HSData,chartTitleName,mapChange;
+    var exportCTData,exportHSData,importCTData,importHSData;
+    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json',function(data){
+        exportHSData = data;
     });   
-    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json',function(exportCTData){
-        CTData = exportCTData;
+    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json',function(data){
+        exportCTData = data;
+    });
+    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/importStateHS.json',function(data){
+        importHSData = data;
+    });   
+    $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/importStateCT.json',function(data){
+        importCTData = data;
     });
     chartTitleName = "Export";
+    CTData = exportCTData;
+    HSData = exportHSData;
 
     var HSCode = [
         {from:1, to:5, name: 'Animal & Animal Products'},
@@ -69,9 +78,6 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.
         {from:86, to:89, name: 'Transportation'},
         {from:90, to:97, name: 'Miscellaneous'}
     ];
-
-
-
 
 //注册地图
     echarts.registerMap('USA', usaJson, {});
@@ -288,54 +294,195 @@ var allCTCoor = function(data, year){
     
     
 };
-//筛选出口的起始点
-var convertData = function (data,select) {
+//筛选进出口的起始点
+var convertData = function (data,select,year) {
     var res = [];
     if(select == "Export"){
-        data.forEach(function(dataItem){
-            if (dataItem.coor2) {
-                res.push({
-                    fromName: dataItem.statename,
-                    toName: dataItem.countryd,
-                    coords: [dataItem.coor1, dataItem.coor2]
-                });
-            }
-        });
+        if(year == 2013){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.statename,
+                        toName: dataItem.countryd,
+                        coords: [dataItem.coor1, dataItem.coor2],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2013/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else if(year == 2014){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.statename,
+                        toName: dataItem.countryd,
+                        coords: [dataItem.coor1, dataItem.coor2],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2014/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else if(year == 2015){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.statename,
+                        toName: dataItem.countryd,
+                        coords: [dataItem.coor1, dataItem.coor2],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2015/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else if(year == 2016){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.statename,
+                        toName: dataItem.countryd,
+                        coords: [dataItem.coor1, dataItem.coor2],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2016/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
     }
     else if(select == "Import"){
-        data.forEach(function(dataItem){
-            if (dataItem.coor2) {
-                res.push({
-                    fromName: dataItem.countryd,
-                    toName: dataItem.statename,
-                    coords: [dataItem.coor2, dataItem.coor1]
-                });
-            }
-        });
+        if(year == 2013){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.countryd,
+                        toName: dataItem.statename,
+                        coords: [dataItem.coor2, dataItem.coor1],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2013/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else if(year == 2014){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.countryd,
+                        toName: dataItem.statename,
+                        coords: [dataItem.coor2, dataItem.coor1],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2014/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else if(year == 2015){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.countryd,
+                        toName: dataItem.statename,
+                        coords: [dataItem.coor2, dataItem.coor1],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2015/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else if(year == 2016){
+            data.forEach(function(dataItem){
+                if (dataItem.coor2) {
+                    res.push({
+                        fromName: dataItem.countryd,
+                        toName: dataItem.statename,
+                        coords: [dataItem.coor2, dataItem.coor1],
+                        lineStyle:{
+                            normal:{
+                                width:dataItem.val2016/1000+1,
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        
     }
     
     return res;
-    };
-
+};
 //筛选要显示的点
-/*
-var pointData = function(data){
-        var res=[];
+var pointData = function(data,year){
+    var res=[];
+    if(year == 2013){
         data.forEach(function (dataItem) {
-        if(dataItem.countryd == "World"){
-            res.push({
-                name:dataItem.statename,
-                value:dataItem.coor1,
-                symbolSize: dataItem.val2013/50000 +3,
-                val2013:dataItem.val2013,
-
-            })
-        }
+            if(dataItem.rank != 0){
+                res.push({
+                    name:dataItem.countryd,
+                    value:dataItem.coor2,
+                    symbolSize: dataItem.val2013/50000 +5
+                })
+            }
         })
-        
-        return res;
-    };
-*/
+    }
+    else if(year == 2014){
+        data.forEach(function (dataItem) {
+            if(dataItem.rank != 0){
+                res.push({
+                    name:dataItem.countryd,
+                    value:dataItem.coor2,
+                    symbolSize: dataItem.val2014/50000 +5
+                })
+            }
+        })
+    }
+    else if(year == 2015){
+        data.forEach(function (dataItem) {
+            if(dataItem.rank != 0){
+                res.push({
+                    name:dataItem.countryd,
+                    value:dataItem.coor2,
+                    symbolSize: dataItem.val2015/50000 +5
+                })
+            }
+        })
+    }
+    else if(year == 2016){
+        data.forEach(function (dataItem) {
+            if(dataItem.rank != 0){
+                res.push({
+                    name:dataItem.countryd,
+                    value:dataItem.coor2,
+                    symbolSize: dataItem.val2016/50000 +5
+                })
+            }
+        })
+    }
+    return res;
+};
+
 //只输出贸易国家名字
 var CTNameforAxis = function(dataItem){
     var res = [];
@@ -565,46 +712,47 @@ var exportCom = function(data,year,select){
 //地域颜色
 var areaColorValue = function(data,year){
     var res = [];
-    if(year == 2013){
-        data.forEach(function(dataItem){
-            if(dataItem.countryd == "World"){
-                res.push({
-                    name:dataItem.statename,
-                    value:dataItem.val2013
-                });
-            }
-        });
-    }
-    else if(year == 2014){
-        data.forEach(function(dataItem){
-            if(dataItem.countryd == "World"){
-                res.push({
-                    name:dataItem.statename,
-                    value:dataItem.val2014
-                });
-            }
-        });
-    }
-    else if(year == 2015){
-        data.forEach(function(dataItem){
-            if(dataItem.countryd == "World"){
-                res.push({
-                    name:dataItem.statename,
-                    value:dataItem.val2015
-                });
-            }
-        });
-    }
-    else if(year == 2016){
-        data.forEach(function(dataItem){
-            if(dataItem.countryd == "World"){
-                res.push({
-                    name:dataItem.statename,
-                    value:dataItem.val2016
-                });
-            }
-        });
-    }
+        if(year == 2013){
+            data.forEach(function(dataItem){
+                if(dataItem.countryd == "World"){
+                    res.push({
+                        name:dataItem.statename,
+                        value:dataItem.val2013
+                    });
+                }
+            });
+        }
+        else if(year == 2014){
+            data.forEach(function(dataItem){
+                if(dataItem.countryd == "World"){
+                    res.push({
+                        name:dataItem.statename,
+                        value:dataItem.val2014
+                    });
+                }
+            });
+        }
+        else if(year == 2015){
+            data.forEach(function(dataItem){
+                if(dataItem.countryd == "World"){
+                    res.push({
+                        name:dataItem.statename,
+                        value:dataItem.val2015
+                    });
+                }
+            });
+        }
+        else if(year == 2016){
+            data.forEach(function(dataItem){
+                if(dataItem.countryd == "World"){
+                    res.push({
+                        name:dataItem.statename,
+                        value:dataItem.val2016
+                    });
+                }
+            });
+        }
+    
     return res;
 }
 //输出HScode单一目录下的各项总值
@@ -620,6 +768,7 @@ var HSCount = function(data,year){
                     res2.push({
                         name:d.abbreviatn,
                         value:d.val2013,
+                        state:d.statename,
                         HS6:d.hs6
                     });
                 }
@@ -627,6 +776,7 @@ var HSCount = function(data,year){
                     res2.forEach(function(d2){
                         if(d2.name == d.abbreviatn){
                             d2.value = parseFloat(parseFloat(d2.value + d.val2013).toFixed(2));
+                            d2.state = d2.state +',' + d.statename;
                         }
                     });
                 }
@@ -642,6 +792,7 @@ var HSCount = function(data,year){
                     res2.push({
                         name:d.abbreviatn,
                         value:d.val2014,
+                        state:d.statename,
                         HS6:d.hs6
                     });
                 }
@@ -649,6 +800,7 @@ var HSCount = function(data,year){
                     res2.forEach(function(d2){
                         if(d2.name == d.abbreviatn){
                             d2.value = parseFloat(parseFloat(d2.value + d.val2014).toFixed(2));
+                            d2.state = d2.state +',' + d.statename;
                         }
                     });
                 }
@@ -664,6 +816,7 @@ var HSCount = function(data,year){
                     res2.push({
                         name:d.abbreviatn,
                         value:d.val2015,
+                        state:d.statename,
                         HS6:d.hs6
                     });
                 }
@@ -671,6 +824,7 @@ var HSCount = function(data,year){
                     res2.forEach(function(d2){
                         if(d2.name == d.abbreviatn){
                             d2.value = parseFloat(parseFloat(d2.value + d.val2015).toFixed(2));
+                            d2.state = d2.state +',' + d.statename;
                         }
                     });
                 }
@@ -686,6 +840,7 @@ var HSCount = function(data,year){
                     res2.push({
                         name:d.abbreviatn,
                         value:d.val2016,
+                        state:d.statename,
                         HS6:d.hs6
                     });
                 }
@@ -693,6 +848,7 @@ var HSCount = function(data,year){
                     res2.forEach(function(d2){
                         if(d2.name == d.abbreviatn){
                             d2.value = parseFloat(parseFloat(d2.value + d.val2016).toFixed(2));
+                            d2.state = d2.state +',' + d.statename;
                         }
                     });
                 }
@@ -701,7 +857,54 @@ var HSCount = function(data,year){
     }
     return res2;
 }
-
+//要高亮的地图是哪些
+var mapSelect = function(data,select){
+    var res = [];
+    if(select == 'all'){
+        var dataGroup = HSCount(data,year);
+        dataGroup.forEach(function(dataItem){
+            var res2 = dataItem.state.split(',');
+            res2.forEach(function(element){
+                if(!res.contains(element,1)){
+                    res.push({
+                        name:element,
+                        itemStyle: {
+                            normal: {
+                                borderColor: '#fff',
+                                shadowOffsetX: 0,
+                                shadowOffsetY: 0,
+                                shadowBlur: 10,
+                                opacity:'0.5',
+                                label:{show:false}
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+    else{
+        HSData.forEach(function(dataItem){
+            if(dataItem.abbreviatn == data)
+            res.push({
+                hsName:data,
+                name:dataItem.statename,
+                itemStyle: {
+                    normal: {
+                        borderColor: '#fff',
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0,
+                        shadowBlur: 10,
+                        opacity:'0.5',
+                        label:{show:false}
+                    }
+                }
+            }); 
+        });
+    }
+    
+    return res;
+}
 //左上overview
 var optionLT = {
     title: {
@@ -709,6 +912,17 @@ var optionLT = {
         left: 'center',
         textStyle : {
             color: '#000'
+        }
+    },
+    toolbox: {
+        show : true,
+        //orient : 'vertical',
+        left: 'right',
+        top: 'top',
+        feature : {
+            mark : {show: true},
+            restore : {show: true,title:"Reset"},
+            saveAsImage : {show: false}
         }
     },
     tooltip: {
@@ -811,6 +1025,11 @@ var optionLB = {
                                 }
                             ]
                         });
+                        myChartMD.setOption({
+                            geo:{
+                                regions: []
+                            }  
+                        }); 
                     }
                 },
             }
@@ -818,7 +1037,7 @@ var optionLB = {
         tooltip: {  
             position: function (pos, params, dom, rect, size) {
                 // 鼠标在左侧时 tooltip 显示到右侧，鼠标在右侧时 tooltip 显示到左侧。
-                var obj = {top:pos[1]};
+                var obj = {top:pos[1]+8};
                 obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
                 return obj;
             },
@@ -874,7 +1093,7 @@ var optionMap = {
     backgroundColor: '#404a59',
     title : { 
         text: 'Trade Route Map',
-        left: 'right',
+        left: 'left',
         textStyle : {
             color: '#fff',
             fontSize:12
@@ -882,9 +1101,9 @@ var optionMap = {
     },
     toolbox: {
         show : true,
-        orient : 'vertical',
+       // orient : 'vertical',
         left: 'right',
-        top: 'center',
+        top: 'top',
         feature : {
             mark : {show: true},
             restore : {show: true,title:"Reset"},
@@ -954,7 +1173,7 @@ var optionMap = {
                 period: 6,
                 trailLength: 0,
                 //symbol: planePath,
-                symbolSize: 15
+                symbolSize: 3
             },
             lineStyle: {
                 normal: {
@@ -962,6 +1181,27 @@ var optionMap = {
                     width: 1,
                     opacity: 0.6,
                     curveness: 0.2
+                }
+            },
+            data: []
+        },
+        {
+            name: chartTitleName + ' points',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                emphasis: {
+                    borderColor: '#fff',
+                    borderWidth: 1
                 }
             },
             data: []
@@ -978,7 +1218,7 @@ var optionMD = {
         text: 'US Census Foreign Trade statistics',
         subtext: 'Source: US Cencus',
         sublink: 'http://www.census.gov/popest/data/datasets.html',
-        left: 'right',
+        left: 'left',
         textStyle : {
             color: '#fff'
         }
@@ -992,15 +1232,15 @@ var optionMD = {
         },
         text:['High','Low'],
         textStyle:{
-            color:"red"
-        },           // 文本，默认为数值文本
+            color:"#fff"
+        },         
         calculable: true   
     },
     toolbox: {
         show : true,
-        orient : 'vertical',
+        //orient : 'vertical',
         left: 'right',
-        top: 'center',
+        top: 'top',
         feature : {
             mark : {show: true},
             restore : {show: true,title:"Reset"},
@@ -1017,7 +1257,7 @@ var optionMD = {
         map: 'usa',
         roam: true,
         selectedMode:'single',
-        center:[-100,39],
+        center:[-105,39],
         zoom:0,
         scaleLimit:{
             min:-1,
@@ -1039,6 +1279,7 @@ var optionMD = {
                 label:{show:false}
             }
         },
+        regions: [],
         label:false
     },
     series:[
@@ -1064,6 +1305,17 @@ var mapClickFunction = function(params){
             textStyle : {
                 color: '#000',
                 fontSize: 12
+            }
+        },
+        toolbox: {
+            show : true,
+            //orient : 'vertical',
+            left: 'right',
+            top: 'top',
+            feature : {
+                mark : {show: true},
+                restore : {show: true,title:"Reset"},
+                saveAsImage : {show: false}
             }
         },
         tooltip: {
@@ -1118,16 +1370,26 @@ var mapClickFunction = function(params){
                 fontSize: 12
             }
         },
+        toolbox: {
+            show : true,
+            //orient : 'vertical',
+            left: 'right',
+            top: 'top',
+            feature : {
+                mark : {show: true},
+                restore : {show: true,title:"Reset"},
+                saveAsImage : {show: false}
+            }
+        },
         tooltip: {  
             position: function (pos, params, dom, rect, size) {
                 // 鼠标在左侧时 tooltip 显示到右侧，鼠标在右侧时 tooltip 显示到左侧。
-                console.log(pos);
                 var obj = {top:pos[1]};
                 obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
                 return obj;
             },
             formatter : function (params2) {
-                return params.name+" "+params2.seriesName+"("+year+")"+ ' Commodities' + '<br/>' + params2.name + ' : $' + params2.value+'M';
+                return params.name+" "+params2.seriesName+"("+year+")"+ ' Commodities' + '<br/>' + params2.name + ' :' + '<br/>'+'$'+ params2.value+'M';
             }
         },
         xAxis: {
@@ -1181,11 +1443,15 @@ var mapClickFunction = function(params){
         series:[
         {
             name: chartTitleName + ' effect',
-            data: convertData(CTData.filter(function(d){return d.statename==params.name;}),chartTitleName)
+            data: convertData(CTData.filter(function(d){return d.statename==params.name;}),chartTitleName,year)
         },
         {
             name: chartTitleName + ' partners',
-            data: convertData(CTData.filter(function(d){return d.statename==params.name;}),chartTitleName)
+            data: convertData(CTData.filter(function(d){return d.statename==params.name;}),chartTitleName,year)
+        },
+        {
+            name: chartTitleName + ' points',
+            data: pointData(CTData.filter(function(d){return d.statename==params.name;}),year)
         }
     ]
     });
@@ -1193,44 +1459,61 @@ var mapClickFunction = function(params){
 
 var mapClick = function(){
     myChartMD.on('click',function(params){
-       return mapClickFunction(params);
+        mapChange = params;
+       return mapClickFunction(mapChange);
     });
 };
 mapClick();
 
+
 var chartLBFunction = function(){
-    myChartLB.on('click', function(params){
-        myChartLB.setOption({
-            title: {
-                subtext: params.name+'('+ year +')'+' Details',
-                subtextStyle:{
-                    color:"#000",
-                    fontStyle:"bold",
-                    fontSize:12
-                }
-            },
-            toolbox: {
-                feature : {
-                    myTool1 : {show: true},
-                }
-            },
-            xAxis: {
-                data:HSNameforAxis(HSCount(params.name,year),0)
-            },
-            series: [
-                {
-                    name: chartTitleName,
-                    type: 'bar',
-                    data:[]
+    myChartLB.on('click', function(params){    
+        if(HSCode.contains(params.name,1)){
+            myChartLB.setOption({
+                title: {
+                    subtext: params.name+'('+ year +')'+' Details',
+                    subtextStyle:{
+                        color:"#000",
+                        fontStyle:"bold",
+                        fontSize:12
+                    }
                 },
-                {
-                    name:chartTitleName+"details",
-                    type: 'bar',
-                    data:HSCount(params.name,year)
-                    
-                }
-            ]
-        });
+                toolbox: {
+                    feature : {
+                        myTool1 : {show: true},
+                    }
+                },
+                xAxis: {
+                    data:HSNameforAxis(HSCount(params.name,year),0)
+                },
+                series: [
+                    {
+                        name: chartTitleName,
+                        type: 'bar',
+                        data:[]
+                    },
+                    {
+                        name:chartTitleName+"details",
+                        type: 'bar',
+                        data:HSCount(params.name,year)
+                        
+                    }
+                ]
+            });
+            myChartMD.setOption({
+                geo:{
+                    regions: mapSelect(params.name,'all')
+                }  
+            });  
+        }
+        else{
+            myChartMD.setOption({
+                geo:{
+                    regions: mapSelect(params.name)
+                }  
+            }); 
+            
+        }
     });
 }
 
@@ -1298,33 +1581,39 @@ var setUpCharts = function(){
 };
 
 
+
 $('input[type=radio][name=trade]').on('change',function(){
     trade = $(this).val();
-    if(trade == "Export"){
-        $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json',function(exportHSData){
-            HSData = exportHSData;
-        });   
-        $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateCT.json',function(exportCTData){
-            CTData = exportCTData;
-        });
+    if(trade == "Export"){ 
+        HSData = exportHSData;  
+        CTData = exportCTData;
         chartTitleName = "Export";
     }
     else if(trade == "Import"){
-        $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/importStateHS.json',function(importHSData){
-            HSData = importHSData;
-        });   
-        $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/importStateCT.json',function(importCTData){
-            CTData = importCTData;
-        });
+            HSData = importHSData;  
+            CTData = importCTData;    
         chartTitleName = "Import";
     }
+    myChartMD.setOption({
+        geo:{
+            regions: []
+        }  
+    });  
     setUpCharts();
+    mapClickFunction(mapChange);
     mapClick();
+    
 });
   
 $('input[type=radio][name=year]').on('change',function(){
     year = $(this).val();
+    myChartMD.setOption({
+        geo:{
+            regions: []
+        }  
+    });  
     setUpCharts();
+    mapClickFunction(mapChange);
     mapClick();
 });
 
