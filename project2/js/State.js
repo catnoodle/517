@@ -1,26 +1,6 @@
-
 $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/map.geojson', function (usaJson) {
 $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.json', function (USAJson) {
-    
-        echarts.registerMap('usa', USAJson, {
-            Alaska: {              // 把阿拉斯加移到美国主大陆左下方
-                left: -131,
-                top: 25,
-                width: 15
-            },
-            Hawaii: {
-                left: -110,        // 夏威夷
-                top: 28,
-                width: 5
-            },
-            'Puerto Rico': {       // 波多黎各
-                left: -76,
-                top: 26,
-                width: 2
-            }
-        });
-   
-   
+       
     var domChartLeftTop = document.getElementById('leftTop');
     var myChartLT = echarts.init(domChartLeftTop);
 
@@ -39,11 +19,23 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.
     var domChartRightButtom = document.getElementById('rightButtom');
     var myChartRB = echarts.init(domChartRightButtom);
 
+    var domWorldMap = document.getElementById('worldMap');
+    var myChartWM = echarts.init(domWorldMap);
+
+    var domUSMap = document.getElementById('USMap');
+    var myChartUSM = echarts.init(domUSMap);
+
+    var domUSChart = document.getElementById('USChart');
+    var myChartUSC = echarts.init(domUSChart);
+
     var year = document.getElementById('year').value;
     var trade = document.getElementById('trade').value;
+
+    var yearB = document.getElementById('yearB').value;
+    var tradeB = document.getElementById('tradeB').value;
     
     $.ajaxSettings.async=false;
-    var CTData,HSData,chartTitleName,mapChange;
+    var CTData,HSData,chartTitleName,mapChange,mapChangeforWorldMap,CTDataB,chartTitleNameB;
     var exportCTData,exportHSData,importCTData,importHSData;
     $.getJSON('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/exportStateHS.json',function(data){
         exportHSData = data;
@@ -58,8 +50,10 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.
         importCTData = data;
     });
     chartTitleName = "Export";
+    chartTitleNameB = "Export";
     CTData = exportCTData;
     HSData = exportHSData;
+    CTDataB = importCTData;
 
     var HSCode = [
         {from:1, to:5, name: 'Animal & Animal Products'},
@@ -81,6 +75,28 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.
 
 //注册地图
     echarts.registerMap('USA', usaJson, {});
+    echarts.registerMap('usa', USAJson, {
+        Alaska: {              // 把阿拉斯加移到美国主大陆左下方
+            left: -131,
+            top: 25,
+            width: 15
+        },
+        Hawaii: {
+            left: -110,        // 夏威夷
+            top: 28,
+            width: 5
+        },
+        'Puerto Rico': {       // 波多黎各
+            left: -76,
+            top: 26,
+            width: 2
+        },
+        'Virgin Islands': {
+            left: -99,
+            top: 30,
+            width: 15
+        }
+    });
 
 //筛选年份
 var countCTVal  = function(data, year){
@@ -511,7 +527,7 @@ var HSNameforAxis = function(dataItem,select){
     return res;
 }
 
-//输出贸易国家总额
+//输出贸易国家总额 & 世界区域颜色
 var exportCTVal = function(dataItem, year){
     var CTname = CTNameforAxis(dataItem);
     var res = [];
@@ -523,11 +539,13 @@ var exportCTVal = function(dataItem, year){
                     count += data.val2013; 
                 }
             });
-            res.push({
-                name:element,
-                value:count.toFixed(2)
-            });
-        });
+            if(count.toFixed(2) != 0){
+                res.push({
+                    name:element,
+                    value:count.toFixed(2)
+                });
+            }
+        });   
     } 
     else if(year == 2014){
         CTname.forEach(function(element){
@@ -537,10 +555,12 @@ var exportCTVal = function(dataItem, year){
                     count += data.val2014; 
                 }
             });
-            res.push({
-                name:element,
-                value:count.toFixed(2)
-            });
+            if(count.toFixed(2) != 0){
+                res.push({
+                    name:element,
+                    value:count.toFixed(2)
+                });
+            }
         });
     }   
     else if(year == 2015){
@@ -551,10 +571,12 @@ var exportCTVal = function(dataItem, year){
                     count += data.val2015; 
                 }
             });
-            res.push({
-                name:element,
-                value:count.toFixed(2)
-            });
+            if(count.toFixed(2) != 0){
+                res.push({
+                    name:element,
+                    value:count.toFixed(2)
+                });
+            }
         });
     }  
     else if(year == 2016){
@@ -565,14 +587,18 @@ var exportCTVal = function(dataItem, year){
                     count += data.val2016; 
                 }
             });
-            res.push({
-                name:element,
-                value:count.toFixed(2)
-            });
+            if(count.toFixed(2) != 0){
+                res.push({
+                    name:element,
+                    value:count.toFixed(2)
+                });
+            }
+            
         });
     }  
     return res;
 };
+
 //取数字前两位
 var cutNumber = function(data){
     var number = data.toString();
@@ -755,6 +781,7 @@ var areaColorValue = function(data,year){
     
     return res;
 }
+
 //输出HScode单一目录下的各项总值
 var HSCount = function(data,year){
     var res = HSCode.filter(function(d){return d.name == data});
@@ -905,6 +932,167 @@ var mapSelect = function(data,select){
     
     return res;
 }
+//只输出跟某国有贸易的美国州数据
+var CTStateforChart = function(data){
+    var res =[];
+    if(yearB == 2013){
+        data.forEach(function(dataItem){
+            if(data.val2013 != 0){
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.val2013
+                });
+            } 
+        }); 
+    }
+    else if(yearB == 2014){
+        data.forEach(function(dataItem){
+            if(data.val2014 != 0){
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.val2014
+                });
+            } 
+        }); 
+    }
+    else if(yearB == 2015){
+        data.forEach(function(dataItem){
+            if(data.val2015 != 0){
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.val2015
+                });
+            } 
+        }); 
+    }
+    else if(yearB == 2016){
+        data.forEach(function(dataItem){
+            if(data.val2016 != 0){
+                res.push({
+                    name: dataItem.statename,
+                    value:dataItem.val2016
+                });
+            } 
+        }); 
+    }
+    return res;
+}
+//只输出跟某国有贸易的美国州名字
+var CTStateforAxis = function(dataItem){
+    var res = [];
+    if(yearB == 2013){
+        dataItem.forEach(function(element){
+            if(!res.contains(element.countryd,0) && element.val2013 != 0){
+                res.push(element.statename);
+            };     
+        });
+    }
+    else if(yearB == 2014){
+        dataItem.forEach(function(element){
+            if(!res.contains(element.countryd,0) && element.val2014 != 0){
+                res.push(element.statename);
+            };     
+        });
+    }
+    else if(yearB == 2015){
+        dataItem.forEach(function(element){
+            if(!res.contains(element.countryd,0) && element.val2015 != 0){
+                res.push(element.statename);
+            };     
+        });
+    }
+    else if(yearB == 2016){
+        dataItem.forEach(function(element){
+            if(!res.contains(element.countryd,0) && element.val2016 != 0){
+                res.push(element.statename);
+            };     
+        });
+    }
+    return res;
+};
+//高亮跟某国有贸易的美国州
+var stateSelect = function(data){
+    var res = [];
+    if(yearB == 2013){
+        data.forEach(function(dataItem){
+            if(dataItem.val2013 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 10,
+                            opacity:'0.5',
+                            label:{show:false}
+                        }
+                    }
+                });
+            }
+        });
+    }
+    else if(yearB == 2014){
+        data.forEach(function(dataItem){
+            if(dataItem.val2014 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 10,
+                            opacity:'0.5',
+                            label:{show:false}
+                        }
+                    }
+                });
+            }
+        });
+    }
+    else if(yearB == 2015){
+        data.forEach(function(dataItem){
+            if(dataItem.val2015 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 10,
+                            opacity:'0.5',
+                            label:{show:false}
+                        }
+                    }
+                });
+            }
+        });
+    }
+    else if(yearB == 2016){
+        data.forEach(function(dataItem){
+            if(dataItem.val2016 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowBlur: 10,
+                            opacity:'0.5',
+                            label:{show:false}
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    return res;
+}
+
 //左上overview
 var optionLT = {
     title: {
@@ -1088,7 +1276,7 @@ var optionLB = {
     };
 myChartLB.setOption(optionLB);
 
-//画出地图
+//世界地图
 var optionMap = {
     backgroundColor: '#404a59',
     title : { 
@@ -1211,11 +1399,199 @@ var optionMap = {
 }
 myChartM.setOption(optionMap);
 
+//美国地图
 var path = 'arrow';
 var optionMD = {
     backgroundColor: '#404a59',
     title : { 
-        text: 'US Census Foreign Trade statistics',
+        text: 'US Census Foreign Trade Statistics',
+        subtext: 'Source: US Cencus',
+        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        left: 'left',
+        textStyle : {
+            color: '#fff'
+        }
+    },
+    visualMap: {
+        left: 'left',
+        min: 0,
+        max: 300000,
+        inRange: {
+            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+        },
+        text:['High','Low'],
+        textStyle:{
+            color:"#fff"
+        },         
+        calculable: true   
+    },
+    toolbox: {
+        show : true,
+        //orient : 'vertical',
+        left: 'right',
+        top: 'top',
+        feature : {
+            mark : {show: true},
+            restore : {
+                show: true,
+                title:"Reset"
+            },
+            saveAsImage : {show: false}
+        }
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter : function (params) {
+            return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+        }
+    },  
+    geo: {
+        map: 'usa',
+        roam: true,
+        selectedMode:'single',
+        center:[-105,39],
+        zoom:0,
+        scaleLimit:{
+            min:-1,
+            max:30
+        },
+        itemStyle:{
+            normal:{
+                areaColor: '#323c48',
+                borderColor: '#404a59',
+                borderWidth: 1
+            },
+            emphasis:{
+                borderColor: '#fff',
+                areaColor: '#323c48',
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 20,
+                opacity:'0.5',
+                label:{show:false}
+            }
+        },
+        regions: [],
+        label:false
+    },
+    series:[
+        {
+            name: chartTitleName,
+            type: 'map',
+            geoIndex: 0,
+            data:areaColorValue(CTData,year)
+        }
+    ]
+};
+myChartMD.setOption(optionMD);
+
+//世界地图2
+var optionWorldMap = {
+    backgroundColor: '#404a59',
+    title : { 
+        text: 'World Trade Statistics',
+        subtext: 'Source: US Cencus',
+        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        left: 'left',
+        textStyle : {
+            color: '#fff',
+        }
+    },
+    visualMap: {
+        left: 'left',
+        min: 0,
+        max: 300000,
+        inRange: {
+            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+        },
+        text:['High','Low'],
+        textStyle:{
+            color:"#fff"
+        },         
+        calculable: true   
+    },
+    toolbox: {
+        show : true,
+       // orient : 'vertical',
+        left: 'right',
+        top: 'top',
+        feature : {
+            mark : {show: true},
+            restore : {
+                show: true,
+                title:"Reset",
+                restore : {
+                    show: true,
+                    title:"Reset",
+                    onclick:function(){
+                        mapChangeforWorldMap = null;
+                        myChartUSM.setOption({
+                            geo:{
+                                regions: []
+                            } 
+                        });
+                    }
+                },
+        },
+            saveAsImage : {show: false}
+        }
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter : function (params) {
+            if(params.value){
+                return "US "+ params.seriesName+"("+yearB+")" +" partners "+ '<br/>' + params.name + ' : $' + params.value+'M';
+            }
+            else{
+                return  "US "+ params.seriesName+"("+yearB+")" +" partners "+ '<br/>' + params.name + ' : No data';
+            }
+        }
+    },  
+    geo: {
+        map: 'USA',
+        roam: true,
+        selectedMode:'single',
+        center:[0,20],
+        zoom:0,
+        scaleLimit:{
+            min:1.2,
+            max:100
+        },
+        //silent: true,  
+        itemStyle:{
+            normal:{
+                areaColor: '#323c48',
+                borderColor: '#404a59',
+                borderWidth: 1
+            },
+            emphasis:{
+                borderColor: '#fff',
+                areaColor: '#323c48',
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 20,
+                opacity:'0.5',
+                label:{show:false}
+            }
+        },
+        label:false
+    },
+    series:[
+        {
+            name: chartTitleNameB,
+            type: 'map',
+            geoIndex: 0,
+            data:exportCTVal(CTDataB,yearB)
+        }
+    ]
+}
+myChartWM.setOption(optionWorldMap);
+
+//美国地图2
+var optionUSMap = {
+    backgroundColor: '#404a59',
+    title : { 
+        text: 'US Trade States',
         subtext: 'Source: US Cencus',
         sublink: 'http://www.census.gov/popest/data/datasets.html',
         left: 'left',
@@ -1250,7 +1626,7 @@ var optionMD = {
     tooltip : {
         trigger: 'item',
         formatter : function (params) {
-            return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+            return "US "+params.seriesName+"("+yearB+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
         }
     },  
     geo: {
@@ -1261,7 +1637,7 @@ var optionMD = {
         zoom:0,
         scaleLimit:{
             min:-1,
-            max:4
+            max:30
         },
         itemStyle:{
             normal:{
@@ -1284,20 +1660,92 @@ var optionMD = {
     },
     series:[
         {
-            name: chartTitleName,
+            name: chartTitleNameB,
             type: 'map',
             geoIndex: 0,
-            data:areaColorValue(CTData,year)
+            data:areaColorValue(CTDataB,yearB)
         }
     ]
 };
-myChartMD.setOption(optionMD);
+myChartUSM.setOption(optionUSMap);
+
+var worldMapClickFunction = function(params){ 
+    var CTres = CTDataB.filter(function(data){return data.countryd == params.name});
+    var optionUSChart = {
+        title: {
+            text: params.name+" "+chartTitleNameB+'('+ yearB +')'+' US States',
+            left: 'center',
+            textStyle : {
+                color: '#000',
+                fontSize: 12
+            }
+        },
+        toolbox: {
+            show : true,
+            //orient : 'vertical',
+            left: 'right',
+            top: 'top',
+            feature : {
+                mark : {show: true},
+                restore : {show: true,title:"Reset"},
+                saveAsImage : {show: false}
+            }
+        },
+        tooltip: {
+            formatter : function (params2) {
+                return params.name+" "+params2.seriesName+"("+yearB+")" +' US States'+ '<br/>' + params2.name + ' : $' + params2.value+'M';
+            }
+        },
+        xAxis: {
+            axisTick:{
+                alignWithLabel: true,
+            },
+          data:CTStateforAxis(CTres,yearB)
+        },
+        yAxis: {},
+        grid:{x:'10%', y:'20%', width:'80%', top:'10%' },
+        dataZoom: [
+            {
+                type: 'slider',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+            {
+                type: 'inside',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100,
+                filterMode: 'none'
+            
+            },
+            {
+                type: 'slider',
+                yAxisIndex: 0,
+                start: 0,
+                end: 100
+            },
+        ],
+        series: [{
+            name: chartTitleNameB,
+            type: 'bar',
+            data:CTStateforChart(CTres)
+        }]
+    }
+    myChartUSC.setOption(optionUSChart);
+
+    myChartUSM.setOption({
+        geo:{
+            regions: stateSelect(CTres)
+        } 
+    });
+};
 
 
 var mapClickFunction = function(params){ 
     var CTres = CTData.filter(function(data){return data.statename == params.name});
     var HSres = HSData.filter(function(data){return data.statename == params.name});
-
+    
     var optionRT = {
         title: {
             text: params.name+" Top25 "+chartTitleName+'('+ year +')'+' Countries',
@@ -1465,6 +1913,13 @@ var mapClick = function(){
 };
 mapClick();
 
+var worldMapClick = function(){
+    myChartWM.on('click',function(params){
+        mapChangeforWorldMap = params;
+       return worldMapClickFunction(mapChangeforWorldMap);
+    });
+};
+worldMapClick();
 
 var chartLBFunction = function(){
     myChartLB.on('click', function(params){    
@@ -1580,6 +2035,15 @@ var setUpCharts = function(){
 
 };
 
+var setUpChartsB = function(){       
+    myChartWM.setOption({
+        series:[{
+            name:chartTitleNameB,
+            data: exportCTVal(CTDataB,yearB)
+        }]
+    });
+
+};
 
 
 $('input[type=radio][name=trade]').on('change',function(){
@@ -1617,7 +2081,38 @@ $('input[type=radio][name=year]').on('change',function(){
     mapClick();
 });
 
-
+$('input[type=radio][name=tradeB]').on('change',function(){
+    tradeB = $(this).val();
+    if(tradeB == "Export"){ 
+        CTDataB = importCTData;
+        chartTitleNameB = "Export";
+    }
+    else if(tradeB == "Import"){
+        CTDataB = exportCTData;    
+        chartTitleNameB = "Import";
+    }
+    myChartWM.setOption({
+        geo:{
+            regions: []
+        }  
+    });  
+    setUpChartsB();
+    worldMapClickFunction(mapChangeforWorldMap);
+    worldMapClick();
+    
+});
+  
+$('input[type=radio][name=yearB]').on('change',function(){
+    yearB = $(this).val();
+    myChartWM.setOption({
+        geo:{
+            regions: []
+        }  
+    });  
+    setUpChartsB();
+    worldMapClickFunction(mapChangeforWorldMap);
+    worldMapClick();
+});
 
 
 });

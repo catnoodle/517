@@ -25,11 +25,19 @@
       max-width: 2400px; 
       margin: 0 auto; 
     }
+    #containerB {
+      height: 700px; 
+      min-width:1400px; 
+      max-width: 2400px; 
+      margin: 0 auto; 
+      top:5px;
+    }
 
     #left {
       
       width: 380px;
       float: left;
+      left: 2px;
       
     }
 
@@ -43,6 +51,20 @@
       stroke-width: 0.5px;
     }
     
+    #rightB {
+      width: 570px;
+      text-align: center;
+      color: gray;
+      float: right;
+      stroke: grey;
+      stroke-width: 0.5px;
+      margin-top:-675px;
+    }
+    #USMap, #USChart {
+      height: 340px;
+      width:  540px;
+    }
+
     #leftTop, #leftButtom, #rightTop, #rightButtom {
       height: 340px;
       width:  360px;
@@ -56,9 +78,18 @@
       top:50px;
     }
 
+    #worldMap {
+      height: 698px;
+      width: 850px;
+      position: relative;
+      top:23px;
+      left:2px;
+      bottom: 2px;
+    }
+
     .loading {
       position: relative;
-      top:100px;
+      top:10px;
       text-align: center;
       color: gray; 
     }
@@ -72,6 +103,15 @@
       
     }
     
+    #RadiosB {
+      width:40%;
+      height: 30px;
+      padding: 5px;
+      margin-left:auto;
+      margin-right:auto;
+      
+    }
+
     input {
       margin-right: 10px;
       font-size: 20;
@@ -153,7 +193,38 @@
     </div>
     </div>
     <script src="js/State.js"></script>
-    
+
+
+    <div id='containerB'>
+      
+      <div id="RadiosB" >
+        <h1>Foregin Trade</h1>
+        <span >
+        Years: </t>
+          <input id="yearB" name="yearB" type="radio" value="2013" checked="checked" >2013</input>
+          <input id="yearB" name="yearB" type="radio" value="2014" >2014</input>
+          <input id="yearB" name="yearB" type="radio" value="2015" >2015</input>
+          <input id="yearB" name="yearB" type="radio" value="2016" >2016</input>
+        </span>
+        <span style="margin-left:80px;">
+        Trade model: 
+          <input id="tradeB" name="tradeB" type="radio" value="Export" checked="checked" >Export</input>
+          <input id="tradeB" name="tradeB" type="radio" value="Import" >Import</input>
+        </span>
+      </div>
+      <div class="loading" style="top:50%">
+        <i class="icon-spinner icon-spin icon-large"></i>
+          Loading data from Google Spreadsheets...
+      </div>
+      <div id='worldMap'></div>
+
+      <div id='rightB'>
+        <div id='USMap'></div>
+        <div id='USChart'></div>
+        </div>
+      </div>
+      
+    </div>
 
   </body>
 
