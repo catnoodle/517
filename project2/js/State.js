@@ -83,7 +83,7 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.
         },
         Hawaii: {
             left: -110,        // 夏威夷
-            top: 28,
+            top: 26,
             width: 5
         },
         'Puerto Rico': {       // 波多黎各
@@ -92,9 +92,9 @@ $.get('https://raw.githubusercontent.com/catnoodle/517/master/project2/data/USA.
             width: 2
         },
         'Virgin Islands': {
-            left: -99,
-            top: 30,
-            width: 15
+            left: -73,
+            top: 25,
+            width: 1
         }
     });
 
@@ -934,46 +934,55 @@ var mapSelect = function(data,select){
 }
 //只输出跟某国有贸易的美国州数据
 var CTStateforChart = function(data){
+    var CTName = CTStateforAxis(data);
     var res =[];
     if(yearB == 2013){
-        data.forEach(function(dataItem){
-            if(data.val2013 != 0){
-                res.push({
-                    name: dataItem.statename,
-                    value:dataItem.val2013
-                });
-            } 
-        }); 
+        CTName.forEach(function(element){
+            data.forEach(function(dataItem){
+                if(dataItem.statename==element && dataItem.val2013 != 0){
+                    res.push({
+                        name: dataItem.statename,
+                        value:dataItem.val2013
+                    });
+                } 
+            }); 
+        });
     }
     else if(yearB == 2014){
-        data.forEach(function(dataItem){
-            if(data.val2014 != 0){
-                res.push({
-                    name: dataItem.statename,
-                    value:dataItem.val2014
-                });
-            } 
-        }); 
+        CTName.forEach(function(element){
+            data.forEach(function(dataItem){
+                if(dataItem.statename==element && dataItem.val2014 != 0){
+                    res.push({
+                        name: dataItem.statename,
+                        value:dataItem.val2014
+                    });
+                } 
+            }); 
+        });
     }
     else if(yearB == 2015){
-        data.forEach(function(dataItem){
-            if(data.val2015 != 0){
-                res.push({
-                    name: dataItem.statename,
-                    value:dataItem.val2015
-                });
-            } 
-        }); 
+        CTName.forEach(function(element){
+            data.forEach(function(dataItem){
+                if(dataItem.statename==element && dataItem.val2015 != 0){
+                    res.push({
+                        name: dataItem.statename,
+                        value:dataItem.val2015
+                    });
+                } 
+            }); 
+        });
     }
     else if(yearB == 2016){
-        data.forEach(function(dataItem){
-            if(data.val2016 != 0){
-                res.push({
-                    name: dataItem.statename,
-                    value:dataItem.val2016
-                });
-            } 
-        }); 
+        CTName.forEach(function(element){
+            data.forEach(function(dataItem){
+                if(dataItem.statename==element && dataItem.val2016 != 0){
+                    res.push({
+                        name: dataItem.statename,
+                        value:dataItem.val2016
+                    });
+                } 
+            }); 
+        });
     }
     return res;
 }
@@ -1633,8 +1642,8 @@ var optionUSMap = {
         map: 'usa',
         roam: true,
         selectedMode:'single',
-        center:[-105,39],
-        zoom:0,
+        center:[-103,39],
+        zoom:1.1,
         scaleLimit:{
             min:-1,
             max:30
@@ -1700,7 +1709,7 @@ var worldMapClickFunction = function(params){
             axisTick:{
                 alignWithLabel: true,
             },
-          data:CTStateforAxis(CTres,yearB)
+          data:CTStateforAxis(CTres)
         },
         yAxis: {},
         grid:{x:'10%', y:'20%', width:'80%', top:'10%' },
@@ -2058,11 +2067,6 @@ $('input[type=radio][name=trade]').on('change',function(){
             CTData = importCTData;    
         chartTitleName = "Import";
     }
-    myChartMD.setOption({
-        geo:{
-            regions: []
-        }  
-    });  
     setUpCharts();
     mapClickFunction(mapChange);
     mapClick();
@@ -2071,11 +2075,6 @@ $('input[type=radio][name=trade]').on('change',function(){
   
 $('input[type=radio][name=year]').on('change',function(){
     year = $(this).val();
-    myChartMD.setOption({
-        geo:{
-            regions: []
-        }  
-    });  
     setUpCharts();
     mapClickFunction(mapChange);
     mapClick();
@@ -2091,7 +2090,7 @@ $('input[type=radio][name=tradeB]').on('change',function(){
         CTDataB = exportCTData;    
         chartTitleNameB = "Import";
     }
-    myChartWM.setOption({
+    myChartUSM.setOption({
         geo:{
             regions: []
         }  
@@ -2104,7 +2103,7 @@ $('input[type=radio][name=tradeB]').on('change',function(){
   
 $('input[type=radio][name=yearB]').on('change',function(){
     yearB = $(this).val();
-    myChartWM.setOption({
+    myChartUSM.setOption({
         geo:{
             regions: []
         }  
