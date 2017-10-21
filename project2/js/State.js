@@ -1101,6 +1101,52 @@ var stateSelect = function(data){
     
     return res;
 }
+//输出某国贸易的美国州颜色
+var areaColorValueforForeign = function(data){
+    var res = [];
+    if(yearB == 2013){
+        data.forEach(function(dataItem){
+            if(dataItem.val2013 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    value:dataItem.val2013
+                });
+            }
+        });
+    }
+    else if(yearB == 2014){
+        data.forEach(function(dataItem){
+            if(dataItem.val2014 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    value:dataItem.val2014
+                });
+            }
+        });
+    }
+    else if(yearB == 2015){
+        data.forEach(function(dataItem){
+            if(dataItem.val2015 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    value:dataItem.val2015
+                });
+            }
+        });
+    }
+    else if(yearB == 2016){
+        data.forEach(function(dataItem){
+            if(dataItem.val2016 != 0){
+                res.push({
+                    name:dataItem.statename,
+                    value:dataItem.val2016
+                });
+            }
+        });
+    }
+    return res;
+}
+
 
 //左上overview
 var optionLT = {
@@ -1537,7 +1583,13 @@ var optionWorldMap = {
                         myChartUSM.setOption({
                             geo:{
                                 regions: []
-                            } 
+                            },
+                            series:[
+                                {
+                                    name: chartTitleNameB,
+                                    data:[]
+                                }
+                            ]
                         });
                     }
                 },
@@ -1611,7 +1663,7 @@ var optionUSMap = {
     visualMap: {
         left: 'left',
         min: 0,
-        max: 300000,
+        max: 100000,
         inRange: {
             color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
         },
@@ -1672,7 +1724,7 @@ var optionUSMap = {
             name: chartTitleNameB,
             type: 'map',
             geoIndex: 0,
-            data:areaColorValue(CTDataB,yearB)
+            data:[]
         }
     ]
 };
@@ -1744,9 +1796,20 @@ var worldMapClickFunction = function(params){
     myChartUSC.setOption(optionUSChart);
 
     myChartUSM.setOption({
+        title : { 
+            text: 'US Trade States' + '(' +params.name + ')',
+        },
         geo:{
-            regions: stateSelect(CTres)
-        } 
+            regions: []
+        } ,
+        series:[
+            {
+                name: chartTitleNameB,
+                type: 'map',
+                geoIndex: 0,
+                data:areaColorValueforForeign(CTres)
+            }
+        ]
     });
 };
 
@@ -2090,11 +2153,6 @@ $('input[type=radio][name=tradeB]').on('change',function(){
         CTDataB = exportCTData;    
         chartTitleNameB = "Import";
     }
-    myChartUSM.setOption({
-        geo:{
-            regions: []
-        }  
-    });  
     setUpChartsB();
     worldMapClickFunction(mapChangeforWorldMap);
     worldMapClick();
@@ -2102,12 +2160,7 @@ $('input[type=radio][name=tradeB]').on('change',function(){
 });
   
 $('input[type=radio][name=yearB]').on('change',function(){
-    yearB = $(this).val();
-    myChartUSM.setOption({
-        geo:{
-            regions: []
-        }  
-    });  
+    yearB = $(this).val();  
     setUpChartsB();
     worldMapClickFunction(mapChangeforWorldMap);
     worldMapClick();
