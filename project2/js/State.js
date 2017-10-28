@@ -458,7 +458,15 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2013/5000 +6
+                    symbolSize: dataItem.val2013/5000 +6,
+                    tradeValue: dataItem.val2013,
+                    itemStyle: {
+                        normal:{
+                            color:'#00b4ff',
+                            borderColor:'#68d3ff',
+                            borderWidth:1
+                        }
+                    }
                 })
             }
         })
@@ -469,7 +477,15 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2014/5000 +6
+                    symbolSize: dataItem.val2014/5000 +6,
+                    tradeValue: dataItem.val2014,
+                    itemStyle: {
+                        normal:{
+                            color:'#00b4ff',
+                            borderColor:'#68d3ff',
+                            borderWidth:1
+                        }
+                    }
                 })
             }
         })
@@ -480,7 +496,15 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2015/5000 +6
+                    symbolSize: dataItem.val2015/5000 +6,
+                    tradeValue: dataItem.val2015,
+                    itemStyle: {
+                        normal:{
+                            color:'#00b4ff',
+                            borderColor:'#68d3ff',
+                            borderWidth:1
+                        }
+                    }
                 })
             }
         })
@@ -491,7 +515,15 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2016/5000 +6
+                    symbolSize: dataItem.val2016/5000 +6,
+                    tradeValue: dataItem.val2016,
+                    itemStyle: {
+                        normal:{
+                            color:'#00b4ff',
+                            borderColor:'#68d3ff',
+                            borderWidth:1
+                        }
+                    }
                 })
             }
         })
@@ -1150,7 +1182,22 @@ var areaColorValueforForeign = function(data){
     }
     return res;
 }
+//高亮跟这个州有贸易的国家
+var countrySelect = function(data){
+    var res = pointData(CTData.filter(function(d){return d.statename==mapChange.name;}),year);
+    res.forEach(function(dataItem){
+        
+        if(dataItem.name == data){
+            console.log(dataItem);
+            dataItem.itemStyle.normal.color = '#ff1e00';
+            dataItem.itemStyle.normal.borderColor = '#ff1e00';
+            dataItem.itemStyle.normal.borderWidth = 6;
+            dataItem.itemStyle.normal.opacity = 0.6;
 
+        }
+    });
+    return res;
+}
 
 //左上overview
 var optionLT = {
@@ -1315,10 +1362,10 @@ var optionLB = {
                                     type: 'bar',
                                     itemStyle:{
                                         normal:{
-                                            color:'#d77d28'
+                                            color:'#eb8223'
                                         },
                                         emphasis:{
-                                            color:'#ffa550'
+                                            color:'#ff9637'
                                         }
                                     },
                                     data:[]
@@ -1393,10 +1440,10 @@ var optionLB = {
             type:'bar',
             itemStyle:{
                 normal:{
-                    color:'#d77d28'
+                    color:'#eb8223'
                 },
                 emphasis:{
-                    color:'#ffa550'
+                    color:'#ff9637'
                 }
             },
             data:[]
@@ -1524,16 +1571,17 @@ var optionMap = {
                     show: false
                 }
             },
-            
+            tooltip : {
+                show: true,
+                trigger: 'item',
+                formatter : function (params) {
+                    return mapChange.name+" "+chartTitleName+"("+year+")"+ ' with' + '<br/>' + params.name + ': ' +'$'+ params.data.tradeValue+'M';
+                }
+            },
             itemStyle: {
-                normal:{
-                    color:'#00b4ff',
-                    borderColor:'#68d3ff',
-                    borderWidth:1
-                },
-
                 emphasis: {
                     borderColor: '#fff',
+                    color:'#ff1e00',
                     borderWidth: 1
                 }
             },
@@ -2226,6 +2274,27 @@ var chartLBFunction = function(){
 
 chartLBFunction();
 
+myChartRT.on('mouseover', function(params){
+    myChartM.setOption({
+        series:[
+            {
+                name: chartTitleName + ' points',
+                data: countrySelect(params.name)
+            }
+        ]
+    });
+});
+
+myChartRT.on('mouseout', function(){
+    myChartM.setOption({
+        series:[
+            {
+                name: chartTitleName + ' points',
+                data: pointData(CTData.filter(function(d){return d.statename==mapChange.name;}),year)
+            }
+        ]
+    });
+});
 
 var setUpCharts = function(){
     myChartLT.setOption({
