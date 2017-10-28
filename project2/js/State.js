@@ -1243,7 +1243,7 @@ var optionLT = {
         type: 'bar',
         itemStyle:{
             emphasis:{
-                color:'#ff4540'
+                color:'#eb5a5a'
             }
         },
         cursor:'default',
@@ -1315,10 +1315,10 @@ var optionLB = {
                                     type: 'bar',
                                     itemStyle:{
                                         normal:{
-                                            color:'#ff5f00'
+                                            color:'#d77d28'
                                         },
                                         emphasis:{
-                                            color:'#ff7800'
+                                            color:'#ffa550'
                                         }
                                     },
                                     data:[]
@@ -1384,7 +1384,7 @@ var optionLB = {
             type: 'bar',
             itemStyle:{
                 emphasis:{
-                    color:'#ff4540'
+                    color:'#eb5a5a'
                 }
             },
             data:exportCom(HSData,year,0)
@@ -1393,10 +1393,10 @@ var optionLB = {
             type:'bar',
             itemStyle:{
                 normal:{
-                    color:'#ff5f00'
+                    color:'#d77d28'
                 },
                 emphasis:{
-                    color:'#ff7800'
+                    color:'#ffa550'
                 }
             },
             data:[]
@@ -1749,7 +1749,7 @@ myChartWM.setOption(optionWorldMap);
 
 //美国地图2
 var optionUSMap = {
-    backgroundColor: '#404a59',
+    backgroundColor: '#475160',
     title : { 
         text: 'Foreign Country Trade with U.S. Statistics',
         subtext: 'Source: U.S. Cencus',
@@ -1909,6 +1909,11 @@ var worldMapClickFunction = function(params){
         ],
         series: [{
             z:2,
+            itemStyle:{
+                emphasis:{
+                    color:'#eb5a5a'
+                }
+            },
             name: chartTitleNameB,
             type: 'bar',
             cursor:'default',
@@ -2020,7 +2025,7 @@ var mapClickFunction = function(params){
                     color:'#327dc3'
                 },
                 emphasis:{
-                    color:'#4691d7'
+                    color:'#5aa5eb'
                 }
             },
             data:exportCTVal(CTres,year)
@@ -2115,7 +2120,7 @@ var mapClickFunction = function(params){
                     color:'#327dc3'
                 },
                 emphasis:{
-                    color:'#4691d7'
+                    color:'#5aa5eb'
                 }
             },
             data:exportCom(HSres,year,1)
