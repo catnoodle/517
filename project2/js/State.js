@@ -323,7 +323,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor1, dataItem.coor2],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2013/1000+1,
+                                width:0//dataItem.val2013/1000+1,
                             }
                         }
                     });
@@ -339,7 +339,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor1, dataItem.coor2],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2014/1000+1,
+                                width:0//dataItem.val2014/1000+1,
                             }
                         }
                     });
@@ -355,7 +355,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor1, dataItem.coor2],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2015/1000+1,
+                                width:0//dataItem.val2015/1000+1,
                             }
                         }
                     });
@@ -371,7 +371,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor1, dataItem.coor2],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2016/1000+1,
+                                width:0//dataItem.val2016/1000+1,
                             }
                         }
                     });
@@ -389,7 +389,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor2, dataItem.coor1],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2013/1000+1,
+                                width:0,
                             }
                         }
                     });
@@ -405,7 +405,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor2, dataItem.coor1],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2014/1000+1,
+                                width:0,
                             }
                         }
                     });
@@ -421,7 +421,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor2, dataItem.coor1],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2015/1000+1,
+                                width:0,
                             }
                         }
                     });
@@ -437,7 +437,7 @@ var convertData = function (data,select,year) {
                         coords: [dataItem.coor2, dataItem.coor1],
                         lineStyle:{
                             normal:{
-                                width:dataItem.val2016/1000+1,
+                                width:0,
                             }
                         }
                     });
@@ -458,7 +458,7 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2013/50000 +5
+                    symbolSize: dataItem.val2013/5000 +6
                 })
             }
         })
@@ -469,7 +469,7 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2014/50000 +5
+                    symbolSize: dataItem.val2014/5000 +6
                 })
             }
         })
@@ -480,7 +480,7 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2015/50000 +5
+                    symbolSize: dataItem.val2015/5000 +6
                 })
             }
         })
@@ -491,7 +491,7 @@ var pointData = function(data,year){
                 res.push({
                     name:dataItem.countryd,
                     value:dataItem.coor2,
-                    symbolSize: dataItem.val2016/50000 +5
+                    symbolSize: dataItem.val2016/5000 +6
                 })
             }
         })
@@ -897,12 +897,15 @@ var mapSelect = function(data,select){
                         name:element,
                         itemStyle: {
                             normal: {
-                                borderColor: '#fff',
-                                shadowOffsetX: 0,
-                                shadowOffsetY: 0,
-                                shadowBlur: 10,
-                                opacity:'0.5',
-                                label:{show:false}
+                               
+                                    borderColor: '#fff',
+                                    areaColor: '#323c48',
+                                    shadowOffsetX: 0,
+                                    shadowOffsetY: 0,
+                                    shadowBlur: 20,
+                                    opacity:'0.6',
+                                    label:{show:false}
+                                
                             }
                         }
                     });
@@ -919,10 +922,11 @@ var mapSelect = function(data,select){
                 itemStyle: {
                     normal: {
                         borderColor: '#fff',
+                        areaColor: '#323c48',
                         shadowOffsetX: 0,
                         shadowOffsetY: 0,
-                        shadowBlur: 10,
-                        opacity:'0.5',
+                        shadowBlur: 20,
+                        opacity:'0.6',
                         label:{show:false}
                     }
                 }
@@ -1150,25 +1154,48 @@ var areaColorValueforForeign = function(data){
 
 //左上overview
 var optionLT = {
+    
     title: {
-        text: chartTitleName+'('+ year +')'+' Countries',
+        itemGap:70,
+
+        subtext:' '+year,
+        subtextStyle:{ 
+        color: '#f2f2f2',
+        fontSize: 70,
+        fontWeight:'bold',
+        fontFamily:'sans-serif',
+        },
+
+        z:1,
+        text: 'The U.S. '+chartTitleName+ ' Statistics',
         left: 'center',
         textStyle : {
-            color: '#000'
-        }
+            color: '#000000',
+            fontSize: 12,
+            fontWeight:'normal',
+            fontFamily:'sans-serif',
+          
+        },
+        x:'center',
+        y:'top'
     },
     toolbox: {
         show : true,
+        itemSize:12,
         //orient : 'vertical',
-        left: 'right',
+        right: 4,
         top: 'top',
         feature : {
-            mark : {show: true},
+            saveAsImage:{show:true, title:"Save View"},
             restore : {show: true,title:"Reset"},
-            saveAsImage : {show: false}
+        },
+        iconStyle:{
+        normal:{opacity:0.5},
+        emphasis:{opacity:1}
         }
     },
     tooltip: {
+      
         position: function (pos, params, dom, rect, size) {
             // 鼠标在左侧时 tooltip 显示到右侧，鼠标在右侧时 tooltip 显示到左侧。
             var obj = {top:pos[1]};
@@ -1176,20 +1203,22 @@ var optionLT = {
             return obj;
         },
         formatter : function (params) {
-            return "US "+params.seriesName+"("+year+")" +' Countries'+ '<br/>' + params.name + ' : $' + params.value+'M';
+            return "U.S. "+params.seriesName+'('+year+')'+' with ' + '<br/>' + params.name + ': $' + params.value+'M';
         }
     },
     xAxis: {
+       
         axisTick:{
             alignWithLabel: true,
         },
       data:CTNameforAxis(CTData)
     },
-    yAxis: {},
+    yAxis: {z:2},
     grid:{x:'15%', y:'15%', width:'75%', top:'10%' },
     dataZoom: [
         {
             type: 'slider',
+
             xAxisIndex: 0,
             start: 0,
             end: 100
@@ -1212,6 +1241,13 @@ var optionLT = {
     series: [{
         name: chartTitleName,
         type: 'bar',
+        itemStyle:{
+            emphasis:{
+                color:'#ff4540'
+            }
+        },
+        cursor:'default',
+        z:2,
         data:exportCTVal(CTData,year)
     }]
 };
@@ -1220,30 +1256,44 @@ myChartLT.setOption(optionLT);
 //左下overview
 var optionLB = {
         title: {
-            text: chartTitleName+'('+ year +')'+' Commodities',
+            z:1,
+            itemGap:70,
+            
+                    subtext:' '+year,
+                    subtextStyle:{ 
+                    color: '#f2f2f2',
+                    fontSize: 70,
+                    fontWeight:'bold',
+                    fontFamily:'sans-serif',
+                    },
+
+            text: 'Commodities '+chartTitleName + ' Statistics',
             left: 'center',
             textStyle : {
+                fontSize:12,
                 color: '#000'
             }
         },
         toolbox: {
             show : true,
+            itemSize:12,
             //orient : 'vertical',
-            left: 'right',
+            right: 4,
             top: 'top',
+            iconStyle:{
+                normal:{opacity:0.5},
+                emphasis:{opacity:1}
+                },
             feature : {
-                mark : {show: true},
-                restore : {show: true,title:"Reset"},
-                saveAsImage : {show: false},
                 myTool1: {
                     show: false,
                     title: 'Back',
-                    icon: 'path://M11.3,0c0.1,0.7,0.3,1.3,0.6,1.9c0.6,1.2,1.2,2.4,2,3.6c1.4,2.1,2.7,4.3,4.1,6.4c1,1.5,1.9,3.1,2.6,4.7c0.8,1.5,1.3,3.1,1.5,4.8c0.7,4.2-1.1,8.4-4.6,10.7c-2,1.4-4.5,2-6.9,1.8c-1.6,0-3.1-0.4-4.5-1.2c-3.1-1.6-5.2-4.5-5.7-7.9c-0.3-2-0.1-4.1,0.7-6.1c0.7-1.9,1.6-3.8,2.7-5.5C5.3,11,6.7,8.7,8.2,6.4c1-1.5,1.9-3.2,2.6-4.9C11,1,11.1,0.6,11.3,0.1L11.3,0zM9.9,31.1h0.4c0.5,0,0.9-0.5,0.9-1c0-0.1,0-0.1,0-0.2c-0.1-0.4-0.5-0.7-1-0.7c-3-0.1-5.4-2.5-5.4-5.6c0-0.5-0.4-0.9-0.9-0.9c0,0,0,0-0.1,0c-0.5,0-0.9,0.4-0.9,1l0,0c0,0.3,0,0.6,0,0.9C3.3,28.2,6.3,30.9,9.9,31.1z',
+                    icon: 'path://M547 1652 l-547 -547 552 -552 c439 -439 555 -550 566 -541 11 9 -94 119 -515 540 l-528 528 1548 0 c1540 0 1547 0 1547 20 0 20 -7 20 -1547 20 l-1548 0 528 528 c416 416 525 530 515 540 -6 6 -14 12 -18 12 -3 0 -252 -246 -553 -548z',
                     onclick: function(){
                         myChartLB.setOption({
                             title: {
-                                text: chartTitleName+'('+ year +')'+' Commodities',
-                                subtext:null
+                                text: 'Commodities '+chartTitleName+ ' Statistics',
+                                subtext:' '+year,
                             },
                             toolbox: {
                                 feature : {
@@ -1263,6 +1313,14 @@ var optionLB = {
                                 {
                                     name:chartTitleName+"details",
                                     type: 'bar',
+                                    itemStyle:{
+                                        normal:{
+                                            color:'#ff5f00'
+                                        },
+                                        emphasis:{
+                                            color:'#ff7800'
+                                        }
+                                    },
                                     data:[]
                                     
                                 }
@@ -1275,6 +1333,8 @@ var optionLB = {
                         }); 
                     }
                 },
+                saveAsImage:{show:true, title:"Save View"},
+                restore : {show: true,title:"Reset"}
             }
         },
         tooltip: {  
@@ -1285,7 +1345,7 @@ var optionLB = {
                 return obj;
             },
             formatter : function (params) {
-                return "US "+params.seriesName+"("+year+")"+ ' Commodities' + '<br/>' + params.name + ' :' + '<br/>'+'$'+ params.value+'M';
+                return "U.S. "+params.seriesName+"("+year+")"+ ' Commodities' + '<br/>' +' of '+ params.name + ' :' + '<br/>'+'$'+ params.value+'M';
             }
         },
         xAxis: {
@@ -1294,7 +1354,7 @@ var optionLB = {
             },
           data:HSNameforAxis(HSCode,0)
         },
-        yAxis: {},
+        yAxis: {z:2},
         grid:{x:'15%', y:'15%', width:'75%', top:'10%' },
         dataZoom: [
             {
@@ -1319,12 +1379,26 @@ var optionLB = {
             },
         ],
         series: [{
+            z:2,
             name: chartTitleName,
             type: 'bar',
+            itemStyle:{
+                emphasis:{
+                    color:'#ff4540'
+                }
+            },
             data:exportCom(HSData,year,0)
         },{
             name: chartTitleName+"details",
             type:'bar',
+            itemStyle:{
+                normal:{
+                    color:'#ff5f00'
+                },
+                emphasis:{
+                    color:'#ff7800'
+                }
+            },
             data:[]
         }
         ]
@@ -1332,8 +1406,9 @@ var optionLB = {
 myChartLB.setOption(optionLB);
 
 //世界地图
+var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 var optionMap = {
-    backgroundColor: '#404a59',
+    backgroundColor: '#475160',
     title : { 
         text: 'Trade Route Map',
         left: 'left',
@@ -1344,43 +1419,53 @@ var optionMap = {
     },
     toolbox: {
         show : true,
+        itemStyle:12,
        // orient : 'vertical',
         left: 'right',
         top: 'top',
+        iconStyle:{
+            normal:{borderColor:'#969696',opacity:1},
+            emphasis:{opacity:1}
+        },
         feature : {
-            mark : {show: true},
-            restore : {show: true,title:"Reset"},
-            saveAsImage : {show: false}
+            saveAsImage : {show: false, title:"Save View"},
+            restore : {show: true,title:"Reset"}
         }
     },
     tooltip : {
+        show: true,
         trigger: 'item',
         formatter : function (params) {
             return params.name;
         }
+       
     },  
     geo: {
         map: 'USA',
         roam: true,
-        selectedMode:'single',
         center:[0,15],
         zoom:0,
         scaleLimit:{
             min:1.2,
             max:100
         },
-        //silent: true,  
+        //silent: true,
+        label:{
+        emphasis:{color:'#ffffff'}
+        }, 
         itemStyle:{
             normal:{
                 areaColor: '#323c48',
-                borderColor: '#404a59'
+                borderColor: '#4f5968'
             },
             emphasis:{
                 borderColor: '#fff',
-                //color:'rgba(128, 128, 128, 1)',
                 areaColor: '#323c48',
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 20,
                 opacity:'0.5',
-                label:{show:true}
+                label:{show:false}
             }
         },
     },
@@ -1391,16 +1476,15 @@ var optionMap = {
             zlevel: 1,
             effect: {
                 show: true,
-                period: 6,
-                trailLength: 0.7,
-                color: '#fff',
-                symbolSize: 3
+                period: 7,
+                trailLength: 0.2,
+                symbolSize: 2
             },
             lineStyle: {
                 normal: {
-                    color: 'red',
+                    color: '#67d2ff',
                     width: 0,
-                    curveness: 0.2
+                    curveness: 0.1
                 }
             },
             data:[]
@@ -1409,21 +1493,20 @@ var optionMap = {
             name: chartTitleName + ' partners',
             type: 'lines',
             zlevel: 2,
-            symbol: ['none', 'arrow'],
-            symbolSize: 10,
+            symbolSize: 3,
             effect: {
+                symbol:planePath,
                 show: true,
-                period: 6,
+                period: 7,
                 trailLength: 0,
-                //symbol: planePath,
-                symbolSize: 3
+                symbolSize: 10
             },
             lineStyle: {
                 normal: {
-                    color: 'red',
-                    width: 1,
+                    color: '#ebfaff',
+                    width: 0,
                     opacity: 0.6,
-                    curveness: 0.2
+                    curveness: 0.1
                 }
             },
             data: []
@@ -1441,7 +1524,14 @@ var optionMap = {
                     show: false
                 }
             },
+            
             itemStyle: {
+                normal:{
+                    color:'#00b4ff',
+                    borderColor:'#68d3ff',
+                    borderWidth:1
+                },
+
                 emphasis: {
                     borderColor: '#fff',
                     borderWidth: 1
@@ -1457,14 +1547,16 @@ myChartM.setOption(optionMap);
 //美国地图
 var path = 'arrow';
 var optionMD = {
-    backgroundColor: '#404a59',
+    backgroundColor: '#475160',
     title : { 
-        text: 'US Census Foreign Trade Statistics',
-        subtext: 'Source: US Cencus',
-        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        text: 'The U.S. Census Foreign Trade Statistics',
+        subtext: 'Source: U.S. Cencus',
+        sublink: 'https://www.census.gov/foreign-trade/statistics/state/data/index.html',
         left: 'left',
+        itemGap:6,
         textStyle : {
-            color: '#fff'
+            color: '#fff',
+            fontSize:12
         }
     },
     visualMap: {
@@ -1472,7 +1564,7 @@ var optionMD = {
         min: 0,
         max: 300000,
         inRange: {
-            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#c73730', '#a50026']
         },
         text:['High','Low'],
         textStyle:{
@@ -1482,38 +1574,39 @@ var optionMD = {
     },
     toolbox: {
         show : true,
-        //orient : 'vertical',
+        itemStyle:12,
+       // orient : 'vertical',
         left: 'right',
         top: 'top',
+        iconStyle:{
+            normal:{borderColor:'#969696',opacity:1},
+            emphasis:{opacity:1}
+        },
         feature : {
-            mark : {show: true},
-            restore : {
-                show: true,
-                title:"Reset"
-            },
-            saveAsImage : {show: false}
+            saveAsImage : {show: true, title:"Save View"},
+            restore : {show: true,title:"Reset"}
         }
     },
     tooltip : {
         trigger: 'item',
         formatter : function (params) {
-            return "US "+params.seriesName+"("+year+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+            return params.name + ' ' +params.seriesName+"("+year+")"+ '<br/>'+'$' + params.value+'M';
         }
     },  
     geo: {
         map: 'usa',
         roam: true,
         selectedMode:'single',
-        center:[-105,39],
+        center:[-105,38.5],
         zoom:0,
         scaleLimit:{
             min:-1,
             max:30
         },
+
         itemStyle:{
             normal:{
-                areaColor: '#323c48',
-                borderColor: '#404a59',
+                borderColor: '#222c3c',
                 borderWidth: 1
             },
             emphasis:{
@@ -1542,14 +1635,16 @@ myChartMD.setOption(optionMD);
 
 //世界地图2
 var optionWorldMap = {
-    backgroundColor: '#404a59',
+    backgroundColor: '#475160',
     title : { 
-        text: 'World Trade Statistics',
-        subtext: 'Source: US Cencus',
-        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        text: 'World Trade with U.S. Statistics',
+        itemGap:6,
+        subtext: 'Source: U.S. Cencus',
+        sublink: 'https://www.census.gov/foreign-trade/statistics/state/data/index.html',
         left: 'left',
         textStyle : {
             color: '#fff',
+            fontSize:12
         }
     },
     visualMap: {
@@ -1557,7 +1652,7 @@ var optionWorldMap = {
         min: 0,
         max: 300000,
         inRange: {
-            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#c73730', '#a50026']
         },
         text:['High','Low'],
         textStyle:{
@@ -1567,11 +1662,16 @@ var optionWorldMap = {
     },
     toolbox: {
         show : true,
+        itemStyle:12,
        // orient : 'vertical',
         left: 'right',
         top: 'top',
+        iconStyle:{
+            normal:{borderColor:'#969696',opacity:1},
+            emphasis:{opacity:1}
+        },
         feature : {
-            mark : {show: true},
+            saveAsImage : {show: true, title:"Save View"},
             restore : {
                 show: true,
                 title:"Reset",
@@ -1594,17 +1694,17 @@ var optionWorldMap = {
                     }
                 },
         },
-            saveAsImage : {show: false}
+      
         }
     },
     tooltip : {
         trigger: 'item',
         formatter : function (params) {
             if(params.value){
-                return "US "+ params.seriesName+"("+yearB+")" +" partners "+ '<br/>' + params.name + ' : $' + params.value+'M';
+                return params.name +' '+params.seriesName+'('+yearB+')'+ '<br/>' +  '$' + params.value+'M';
             }
             else{
-                return  "US "+ params.seriesName+"("+yearB+")" +" partners "+ '<br/>' + params.name + ' : No data';
+                return  params.name + ' is not a partner'+ '<br/>' +' of U.S. in this trade' ;
             }
         }
     },  
@@ -1622,8 +1722,7 @@ var optionWorldMap = {
         itemStyle:{
             normal:{
                 areaColor: '#323c48',
-                borderColor: '#404a59',
-                borderWidth: 1
+                borderColor: '#353a43'
             },
             emphasis:{
                 borderColor: '#fff',
@@ -1652,12 +1751,14 @@ myChartWM.setOption(optionWorldMap);
 var optionUSMap = {
     backgroundColor: '#404a59',
     title : { 
-        text: 'US Trade States',
-        subtext: 'Source: US Cencus',
-        sublink: 'http://www.census.gov/popest/data/datasets.html',
+        text: 'Foreign Country Trade with U.S. Statistics',
+        subtext: 'Source: U.S. Cencus',
+        sublink: 'https://www.census.gov/foreign-trade/statistics/state/data/index.html',
         left: 'left',
+        itemGap:6,
         textStyle : {
-            color: '#fff'
+            color: '#fff',
+            fontSize:12
         }
     },
     visualMap: {
@@ -1665,7 +1766,7 @@ var optionUSMap = {
         min: 0,
         max: 100000,
         inRange: {
-            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#c73730', '#a50026']
         },
         text:['High','Low'],
         textStyle:{
@@ -1675,26 +1776,29 @@ var optionUSMap = {
     },
     toolbox: {
         show : true,
-        //orient : 'vertical',
+        itemStyle:12,
+       // orient : 'vertical',
         left: 'right',
         top: 'top',
+        iconStyle:{
+            normal:{borderColor:'#969696',opacity:1},
+            emphasis:{opacity:1}
+        },
         feature : {
-            mark : {show: true},
-            restore : {show: true,title:"Reset"},
-            saveAsImage : {show: false}
+            saveAsImage : {show: true, title:"Save View"},
+            restore : {show: true,title:"Reset"}
         }
     },
     tooltip : {
         trigger: 'item',
         formatter : function (params) {
-            return "US "+params.seriesName+"("+yearB+")" +' States' + '<br/>' + params.name + ' : $' + params.value+'M';
+            return params.seriesName+"("+yearB+") with "+'<br/>' + params.name +': $' + params.value+'M';
         }
     },  
     geo: {
         map: 'usa',
         roam: true,
-        selectedMode:'single',
-        center:[-103,39],
+        center:[-103,38],
         zoom:1.1,
         scaleLimit:{
             min:-1,
@@ -1703,7 +1807,7 @@ var optionUSMap = {
         itemStyle:{
             normal:{
                 areaColor: '#323c48',
-                borderColor: '#404a59',
+                borderColor: '#222c3c',
                 borderWidth: 1
             },
             emphasis:{
@@ -1730,11 +1834,23 @@ var optionUSMap = {
 };
 myChartUSM.setOption(optionUSMap);
 
+//第二页表
+
 var worldMapClickFunction = function(params){ 
     var CTres = CTDataB.filter(function(data){return data.countryd == params.name});
     var optionUSChart = {
         title: {
-            text: params.name+" "+chartTitleNameB+'('+ yearB +')'+' US States',
+            z:1,
+            itemGap:70,
+            
+                    subtext:' '+yearB,
+                    subtextStyle:{ 
+                    color: '#f2f2f2',
+                    fontSize: 70,
+                    fontWeight:'bold',
+                    fontFamily:'sans-serif',
+                    },        
+            text: params.name+" "+chartTitleNameB+'('+ yearB +')'+' with U.S.',
             left: 'center',
             textStyle : {
                 color: '#000',
@@ -1743,18 +1859,22 @@ var worldMapClickFunction = function(params){
         },
         toolbox: {
             show : true,
+            itemSize:12,
             //orient : 'vertical',
-            left: 'right',
+            right: 4,
             top: 'top',
             feature : {
-                mark : {show: true},
+                saveAsImage:{show:true, title:"Save View"},
                 restore : {show: true,title:"Reset"},
-                saveAsImage : {show: false}
+            },
+            iconStyle:{
+            normal:{opacity:0.5},
+            emphasis:{opacity:1}
             }
         },
         tooltip: {
             formatter : function (params2) {
-                return params.name+" "+params2.seriesName+"("+yearB+")" +' US States'+ '<br/>' + params2.name + ' : $' + params2.value+'M';
+                return params.name+" "+params2.seriesName+"("+yearB+")" +' with'+ '<br/>' + params2.name + ' : $' + params2.value+'M';
             }
         },
         xAxis: {
@@ -1763,7 +1883,7 @@ var worldMapClickFunction = function(params){
             },
           data:CTStateforAxis(CTres)
         },
-        yAxis: {},
+        yAxis: {z:2},
         grid:{x:'10%', y:'20%', width:'80%', top:'10%' },
         dataZoom: [
             {
@@ -1788,8 +1908,10 @@ var worldMapClickFunction = function(params){
             },
         ],
         series: [{
+            z:2,
             name: chartTitleNameB,
             type: 'bar',
+            cursor:'default',
             data:CTStateforChart(CTres)
         }]
     }
@@ -1797,7 +1919,7 @@ var worldMapClickFunction = function(params){
 
     myChartUSM.setOption({
         title : { 
-            text: 'US Trade States' + '(' +params.name + ')',
+            text: params.name + ' Trade with U.S. Statistics',
         },
         geo:{
             regions: []
@@ -1813,6 +1935,7 @@ var worldMapClickFunction = function(params){
     });
 };
 
+//Right top
 
 var mapClickFunction = function(params){ 
     var CTres = CTData.filter(function(data){return data.statename == params.name});
@@ -1820,7 +1943,17 @@ var mapClickFunction = function(params){
     
     var optionRT = {
         title: {
-            text: params.name+" Top25 "+chartTitleName+'('+ year +')'+' Countries',
+            itemGap:70,
+            
+            subtext:' '+year,
+            subtextStyle:{ 
+            color: '#f2f2f2',
+            fontSize: 70,
+            fontWeight:'bold',
+            fontFamily:'sans-serif',
+            },
+            z:1,
+            text: params.name+" Top25 "+chartTitleName+' Countries',
             left: 'center',
             textStyle : {
                 color: '#000',
@@ -1829,18 +1962,22 @@ var mapClickFunction = function(params){
         },
         toolbox: {
             show : true,
+            itemSize:12,
             //orient : 'vertical',
-            left: 'right',
+            right: 4,
             top: 'top',
             feature : {
-                mark : {show: true},
+                saveAsImage:{show:true, title:"Save View"},
                 restore : {show: true,title:"Reset"},
-                saveAsImage : {show: false}
+            },
+            iconStyle:{
+            normal:{opacity:0.5},
+            emphasis:{opacity:1}
             }
         },
         tooltip: {
             formatter : function (params2) {
-                return params.name+" "+params2.seriesName+"("+year+")" +' Countries'+ '<br/>' + params2.name + ' : $' + params2.value+'M';
+                return params.name+" "+params2.seriesName+'('+year+')' +' with'+ '<br/>' + params2.name + ': $' + params2.value+'M';
             }
         },
         xAxis: {
@@ -1849,7 +1986,7 @@ var mapClickFunction = function(params){
             },
           data:CTNameforAxis(CTres)
         },
-        yAxis: {},
+        yAxis: {z:2},
         grid:{x:'15%', y:'15%', width:'75%', top:'10%' },
         dataZoom: [
             {
@@ -1874,16 +2011,38 @@ var mapClickFunction = function(params){
             },
         ],
         series: [{
+            z:2,
             name: chartTitleName,
             type: 'bar',
+            cursor:'default',
+            itemStyle:{
+                normal:{
+                    color:'#327dc3'
+                },
+                emphasis:{
+                    color:'#4691d7'
+                }
+            },
             data:exportCTVal(CTres,year)
         }]
     }
     myChartRT.setOption(optionRT);
 
+//Right bottom
+
     var optionRB = {
         title: {
-            text: params.name+" Top25 "+chartTitleName+'('+ year +')'+' Commodities',
+            itemGap:70,
+            
+            subtext:' '+year,
+            subtextStyle:{ 
+            color: '#f2f2f2',
+            fontSize: 70,
+            fontWeight:'bold',
+            fontFamily:'sans-serif',
+            },
+            z:1,
+            text: params.name+" Top25 "+chartTitleName+' Commodities',
             left: 'center',
             textStyle : {
                 color: '#000',
@@ -1892,13 +2051,17 @@ var mapClickFunction = function(params){
         },
         toolbox: {
             show : true,
+            itemSize:12,
             //orient : 'vertical',
-            left: 'right',
+            right: 4,
             top: 'top',
             feature : {
-                mark : {show: true},
+                saveAsImage:{show:true, title:"Save View"},
                 restore : {show: true,title:"Reset"},
-                saveAsImage : {show: false}
+            },
+            iconStyle:{
+            normal:{opacity:0.5},
+            emphasis:{opacity:1}
             }
         },
         tooltip: {  
@@ -1909,7 +2072,7 @@ var mapClickFunction = function(params){
                 return obj;
             },
             formatter : function (params2) {
-                return params.name+" "+params2.seriesName+"("+year+")"+ ' Commodities' + '<br/>' + params2.name + ' :' + '<br/>'+'$'+ params2.value+'M';
+                return params.name+" "+params2.seriesName+"("+year+")"+ ' Commodities of' + '<br/>' + params2.name + ':' + '<br/>'+'$'+ params2.value+'M';
             }
         },
         xAxis: {
@@ -1918,7 +2081,7 @@ var mapClickFunction = function(params){
             },
           data:HSNameforAxis(HSres,1)
         },
-        yAxis: {},
+        yAxis: {z:2},
         grid:{x:'15%', y:'15%', width:'75%', top:'10%' },
         dataZoom: [
             {
@@ -1943,8 +2106,18 @@ var mapClickFunction = function(params){
             },
         ],
         series: [{
+            z:2,
             name: chartTitleName,
             type: 'bar',
+            cursor:'default',
+            itemStyle:{
+                normal:{
+                    color:'#327dc3'
+                },
+                emphasis:{
+                    color:'#4691d7'
+                }
+            },
             data:exportCom(HSres,year,1)
         }]
     }
@@ -1998,12 +2171,14 @@ var chartLBFunction = function(){
         if(HSCode.contains(params.name,1)){
             myChartLB.setOption({
                 title: {
-                    subtext: params.name+'('+ year +')'+' Details',
-                    subtextStyle:{
-                        color:"#000",
-                        fontStyle:"bold",
-                        fontSize:12
-                    }
+                    text:params.name+' '+chartTitleName,
+                    subtext: ' '+year,
+                    subtextStyle:{ 
+                    color: '#f2f2f2',
+                    fontSize: 70,
+                    fontWeight:'bold',
+                    fontFamily:'sans-serif',
+                    },
                 },
                 toolbox: {
                     feature : {
@@ -2050,7 +2225,8 @@ chartLBFunction();
 var setUpCharts = function(){
     myChartLT.setOption({
         title: {
-            text: chartTitleName+'('+ year +')'+' Countries',
+        subtext:' '+year,
+        text: 'The U.S. '+chartTitleName+ ' Statistics',
         },
         xAxis: {
             data: CTNameforAxis(CTData)
@@ -2070,8 +2246,8 @@ var setUpCharts = function(){
     
     myChartLB.setOption({
         title: {
-            text: chartTitleName+'('+ year +')'+' Commodities',
-            subtext:null
+            text: 'Commodities '+chartTitleName+ ' Statistics',
+            subtext:' '+year,
         },
         xAxis: {
             

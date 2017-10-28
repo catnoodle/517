@@ -9,12 +9,14 @@
     <META HTTP-EQUIV="expires" CONTENT="0">
     <title>CN Project2</title>
     <link rel="shortcut icon" href="images/icon.png" />
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/font-awesome.css" rel="stylesheet">
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/watch.js"></script>
     <script src="js/echarts.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+
+  
     
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,60 +32,83 @@
       min-width:1400px; 
       max-width: 2400px; 
       margin: 0 auto; 
-      top:5px;
+      top:0px;
     }
 
     #left {
-      
-      width: 380px;
+      margin-top: 4px;
+      width: 400px;
       float: left;
       left: 2px;
       
     }
 
     #right {
-     
-      width: 380px;
-      text-align: center;
+      margin-top: 4px;
+      width: 394px;
       color: gray;
       float: right;
       stroke: grey;
       stroke-width: 0.5px;
+      margin-right: 8px;
     }
     
     #rightB {
-      width: 570px;
-      text-align: center;
+      width: 650px;
+     
       color: gray;
       float: right;
       stroke: grey;
       stroke-width: 0.5px;
-      margin-top:-675px;
+      margin-top:-607px;
     }
-    #USMap, #USChart {
-      height: 340px;
-      width:  540px;
+    #USMap {
+      height: 285px;
+      width:  630px;
     }
 
-    #leftTop, #leftButtom, #rightTop, #rightButtom {
-      height: 340px;
-      width:  360px;
+    #USChart {
+      height: 295px;
+      width:  626px;
+      margin-left: -20px;
+      margin-bottom: -10px;
+    }
+
+    #leftButtom{
+      margin-top: 10px;
+      margin-bottom: -8px;
+}
+
+    #leftTop, #leftButtom {
+      height: 300px;
+      width:  372px;
+    }
+
+   #rightTop, #rightButtom {
+     margin-left: -2px;
+      height: 300px;
+      width:  368px;
+    }
+
+    #rightButtom{
+      margin-top: 10px;
+      margin-bottom: -8px;
     }
 
     .map {
-      height: 295px;
-      width: 630px;
+      height: 310px;
+      width: 660px;
       margin: 0 auto;
       position: relative;
-      top:50px;
+      top:28px;
     }
 
     #worldMap {
-      height: 698px;
+      height: 634px;
       width: 850px;
       position: relative;
-      top:23px;
-      left:2px;
+      top:28px;
+      left:10px;
       bottom: 2px;
     }
 
@@ -95,19 +120,20 @@
     }
 
     #Radios {
-      width:40%;
-      height: 30px;
-      padding: 5px;
-      margin-left:auto;
+      width:45%;
+      height: 0px;
+      margin-top: -10px;
+      padding: 0px;
+      margin-left:435px;
       margin-right:auto;
       
     }
     
     #RadiosB {
-      width:40%;
-      height: 30px;
-      padding: 5px;
-      margin-left:auto;
+      width:50%;
+      height: 0px;
+      margin-top: 8px;
+      margin-left:14px;
       margin-right:auto;
       
     }
@@ -119,44 +145,42 @@
     }
 
 
-  </style>
-    
+  </style> 
   </head>
 
-  <body>
 
-    <div class="banner-top">
-      <div class="w3_navigation">
-        <div class="container">
-          <nav class="navbar navbar-default">
-            <div class="navbar-header navbar-left">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <h1><a class="navbar-brand" href="index.html"><i aria-hidden="true"></i> CAT NOODLE <p class="logo_w3l_agile_caption">H517 Project2</p></a></h1>
-            </div>
-            <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
-              <nav class="menu menu--iris">
-                <ul class="nav navbar-nav menu__list">
-                  <li class="menu__item menu__item--current"><a href="index.html" class="menu__link">PROJECT</a></li>
-                  <li class="menu__item"><a href="doc.html" class="menu__link scroll">DOCUMENT</a></li>
-                  <li class="menu__item"><a href="youtube.html" class="menu__link scroll">YOUTUBE VIDEO</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
 
-    <div id="container" >
+  <body style="overflow-y:hidden; overflow-x:hidden" >
+
+ <nav class="navbar navbar-default">
+   <div class="container-fluid">
+      <div class="navbar-header">
+      <img src="images/icon.png" style="height:30px; width:30px; float: left; margin: 5px ">
+      <a class="navbar-brand" href="index.html" style="margin-left: -8px">Cat Noodle's Project 2</a>
+       </div>
+
+       <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="index.html"> Views <span class="sr-only">(current)</span></a></li>
+        <li><a href="doc.html"> Document </a></li>
+        <li><a href="youtube.html"> Youtube Video </a></li>
+      </ul>
+  </div>
+</nav>
+
+
+
+<ul class="nav nav-tabs"  style="margin-left: 8px">
+  <li class="active"><a href="#home" data-toggle="tab">The U.S. Foreign Trade Statistics</a></li>
+  <li><a href="#profile" data-toggle="tab">World Trade with U.S. Statistics</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content"  style="margin-left: 10px">
+
+  <div class="tab-pane fade active in" id="home">
+
+<div id="container" >
       <div id="Radios" >
-        <h1>US Trade</h1>
+        <h1></h1>
         <span >
         Years: </t>
           <input id="year" name="year" type="radio" value="2013" checked="checked" >2013</input>
@@ -164,19 +188,33 @@
           <input id="year" name="year" type="radio" value="2015" >2015</input>
           <input id="year" name="year" type="radio" value="2016" >2016</input>
         </span>
-        <span style="margin-left:80px;">
-        Trade model: 
+        <span style="margin-left:238px;">
+        Trade Model: 
           <input id="trade" name="trade" type="radio" value="Export" checked="checked" >Export</input>
           <input id="trade" name="trade" type="radio" value="Import" >Import</input>
         </span>
       </div>
-      <div id="left" >
-        <div id="leftTop" ></div>
-        <div id="leftButtom" ></div>
-      </div>
+
+
+ <div id="left" > 
+  <div class="panel panel-default">
+  <div class="panel-heading" style="padding-top:6px;padding-bottom:6px">Overview of U.S. Foreign Trade</div>
+  <div class="panel-body" style="padding-top:8px;">
+      <div id="leftTop" ></div>
+	    <div id="leftButtom" ></div>
+  </div>
+</div>
+</div>
+
       <div id="right" >
-          <div id="rightTop" ></div>       
-          <div id="rightButtom"></div>
+          <div class="panel panel-default">
+              <div class="panel-heading" style="padding-top:6px;padding-bottom:6px">Detail of State Foreign Trade (Please select from U.S. map)</div>
+              <div class="panel-body" style="padding-top:8px">  
+                  <div id="rightTop"></div> 
+                  <div id="rightButtom"></div>
+              </div>
+            </div>
+          
       </div>
       <div id="mapUp" class="map">
       <div class="loading">
@@ -185,7 +223,7 @@
       </div>
     </div>
     <br/>
-    <div id="mapDown" class="map">
+    <div id="mapDown" class="map" style="margin-top:-5px">
       <div class="loading">
           <i class="icon-spinner icon-spin icon-large"></i>
             Loading data from Google Spreadsheets...
@@ -194,11 +232,12 @@
     </div>
     <script src="js/State.js"></script>
 
+  </div>
 
-    <div id='containerB'>
+  <div class="tab-pane fade" id="profile">
+   <div id='containerB'>
       
-      <div id="RadiosB" >
-        <h1>Foregin Trade</h1>
+      <div id="RadiosB">
         <span >
         Years: </t>
           <input id="yearB" name="yearB" type="radio" value="2013" checked="checked" >2013</input>
@@ -206,25 +245,30 @@
           <input id="yearB" name="yearB" type="radio" value="2015" >2015</input>
           <input id="yearB" name="yearB" type="radio" value="2016" >2016</input>
         </span>
-        <span style="margin-left:80px;">
-        Trade model: 
-          <input id="tradeB" name="tradeB" type="radio" value="Export" checked="checked" >Export</input>
-          <input id="tradeB" name="tradeB" type="radio" value="Import" >Import</input>
+        <span style="margin-left:50px;">
+       Trade Model: 
+          <input id="tradeB" name="tradeB" type="radio" value="Export" checked="checked" >Export to U.S.</input>
+          <input id="tradeB" name="tradeB" type="radio" value="Import" >Import from U.S.</input>
         </span>
       </div>
-      <div class="loading" style="top:50%">
-        <i class="icon-spinner icon-spin icon-large"></i>
-          Loading data from Google Spreadsheets...
-      </div>
+    
       <div id='worldMap'></div>
 
       <div id='rightB'>
-        <div id='USMap'></div>
-        <div id='USChart'></div>
+          <div id='USMap'></div>
+          <div class="panel panel-default" style="width:630px;margin-top:10px">
+              <div class="panel-heading" style="padding-top:6px;padding-bottom:6px">Detail of Foreign Country Trade (Please select from world map)</div>
+              <div class="panel-body" style="padding-top:8px">
+                  <div id='USChart'></div>
+              </div>
+            </div>
         </div>
       </div>
-      
-    </div>
+  </div>
+
+
+</div>
+    
 
   </body>
 
