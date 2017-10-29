@@ -931,11 +931,12 @@ var mapSelect = function(data,select){
                             normal: {
                                
                                     borderColor: '#fff',
+                                    borderWidth:2,
                                     areaColor: '#323c48',
                                     shadowOffsetX: 0,
                                     shadowOffsetY: 0,
                                     shadowBlur: 20,
-                                    opacity:'0.6',
+                                    opacity:'0.7',
                                     label:{show:false}
                                 
                             }
@@ -954,11 +955,12 @@ var mapSelect = function(data,select){
                 itemStyle: {
                     normal: {
                         borderColor: '#fff',
+                        borderWidth:2,
                         areaColor: '#323c48',
                         shadowOffsetX: 0,
                         shadowOffsetY: 0,
                         shadowBlur: 20,
-                        opacity:'0.6',
+                        opacity:'0.7',
                         label:{show:false}
                     }
                 }
