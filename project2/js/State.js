@@ -933,10 +933,11 @@ var mapSelect = function(data,select){
                                     borderColor: '#fff',
                                     borderWidth:2,
                                     areaColor: '#323c48',
+                                    shadowColor:'white',
                                     shadowOffsetX: 0,
                                     shadowOffsetY: 0,
-                                    shadowBlur: 20,
-                                    opacity:'0.7',
+                                    shadowBlur: 10,
+                                    opacity:'0.85',
                                     label:{show:false}
                                 
                             }
@@ -957,10 +958,11 @@ var mapSelect = function(data,select){
                         borderColor: '#fff',
                         borderWidth:2,
                         areaColor: '#323c48',
+                         shadowColor:'white',
                         shadowOffsetX: 0,
                         shadowOffsetY: 0,
-                        shadowBlur: 20,
-                        opacity:'0.7',
+                        shadowBlur: 10,
+                        opacity:'0.85',
                         label:{show:false}
                     }
                 }
