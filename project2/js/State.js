@@ -1214,7 +1214,6 @@ var optionLT = {
         color: '#f2f2f2',
         fontSize: 70,
         fontWeight:'bold',
-        fontFamily:'sans-serif',
         },
 
         z:1,
@@ -1223,9 +1222,7 @@ var optionLT = {
         textStyle : {
             color: '#000000',
             fontSize: 12,
-            fontWeight:'normal',
-            fontFamily:'sans-serif',
-          
+            fontWeight:'normal',    
         },
         x:'center',
         y:'top'
@@ -1315,7 +1312,6 @@ var optionLB = {
                     color: '#f2f2f2',
                     fontSize: 70,
                     fontWeight:'bold',
-                    fontFamily:'sans-serif',
                     },
 
             text: 'Commodities '+chartTitleName + ' Statistics',
@@ -1649,7 +1645,7 @@ var optionMD = {
         map: 'usa',
         roam: true,
         selectedMode:'single',
-        center:[-105,38.5],
+        center:[-103.5,38.5],
         zoom:0,
         scaleLimit:{
             min:-1,
@@ -1900,7 +1896,6 @@ var worldMapClickFunction = function(params){
                     color: '#f2f2f2',
                     fontSize: 70,
                     fontWeight:'bold',
-                    fontFamily:'sans-serif',
                     },        
             text: params.name+" "+chartTitleNameB+'('+ yearB +')'+' with U.S.',
             left: 'center',
@@ -2007,7 +2002,6 @@ var mapClickFunction = function(params){
             color: '#f2f2f2',
             fontSize: 70,
             fontWeight:'bold',
-            fontFamily:'sans-serif',
             },
             z:1,
             text: params.name+" Top25 "+chartTitleName+' Countries',
@@ -2096,7 +2090,6 @@ var mapClickFunction = function(params){
             color: '#f2f2f2',
             fontSize: 70,
             fontWeight:'bold',
-            fontFamily:'sans-serif',
             },
             z:1,
             text: params.name+" Top25 "+chartTitleName+' Commodities',
@@ -2234,7 +2227,6 @@ var chartLBFunction = function(){
                     color: '#f2f2f2',
                     fontSize: 70,
                     fontWeight:'bold',
-                    fontFamily:'sans-serif',
                     },
                 },
                 toolbox: {
